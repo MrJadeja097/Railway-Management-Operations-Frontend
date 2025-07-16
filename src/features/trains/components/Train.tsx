@@ -3,28 +3,45 @@ import { useTrainGetAll } from "../hooks";
 import { TrainCard } from "./TrainCard";
 import { TrainStatuses, type TrainStatus } from "../models";
 
-
 export const TrainComponent: React.FC = () => {
   const { trains, loading } = useTrainGetAll();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<TrainStatus | "ALL">("ALL");
+  const [sortBy, setSortBy] = useState<
+    "NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC"
+  >("NAME_ASC");
 
-  const filteredTrains = trains.filter((train) => {
-    const query = search.toLowerCase();
+  const filteredTrains = trains
+    .filter((train) => {
+      const query = search.toLowerCase();
 
-    const matchesText =
-      train.name.toLowerCase().includes(query) ||
-      train.description.toLowerCase().includes(query) ||
-      train.status.toLowerCase().includes(query) ||
-      train.id.toString().includes(query) ||
-      train.total_coaches.toString().includes(query) ||
-      train.top_speed.toString().includes(query);
+      const matchesText =
+        train.name.toLowerCase().includes(query) ||
+        train.description.toLowerCase().includes(query) ||
+        train.status.toLowerCase().includes(query) ||
+        train.id.toString().includes(query) ||
+        train.total_coaches.toString().includes(query) ||
+        train.top_speed.toString().includes(query);
 
-    const matchesStatus =
-      statusFilter === "ALL" || train.status === statusFilter;
+      const matchesStatus =
+        statusFilter === "ALL" || train.status === statusFilter;
 
-    return matchesText && matchesStatus;
-  });
+      return matchesText && matchesStatus;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "NAME_ASC":
+          return a.name.localeCompare(b.name);
+        case "NAME_DESC":
+          return b.name.localeCompare(a.name);
+        case "ID_ASC":
+          return a.id - b.id;
+        case "ID_DESC":
+          return b.id - a.id;
+        default:
+          return 0;
+      }
+    });
 
   if (loading) {
     return (
@@ -46,24 +63,34 @@ export const TrainComponent: React.FC = () => {
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4 md:mt-0">
-           <select
-  value={statusFilter}
-  onChange={(e) =>
-    setStatusFilter(
-      e.target.value === "ALL"
-        ? "ALL"
-        : (e.target.value as TrainStatus)
-    )
-  }
-  className="px-4 py-2 rounded-lg bg-slate-700/60 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
->
-  <option value="ALL">All</option>
-  {TrainStatuses.map((status) => (
-    <option key={status} value={status}>
-      {status.replaceAll("_", " ")}
-    </option>
-  ))}
-</select>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              className="px-4 py-2 rounded-lg bg-slate-700/60 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+            >
+              <option value="NAME_ASC">Name ↑</option>
+              <option value="NAME_DESC">Name ↓</option>
+              <option value="ID_ASC">ID ↑</option>
+              <option value="ID_DESC">ID ↓</option>
+            </select>
+            <select
+              value={statusFilter}
+              onChange={(e) =>
+                setStatusFilter(
+                  e.target.value === "ALL"
+                    ? "ALL"
+                    : (e.target.value as TrainStatus)
+                )
+              }
+              className="px-4 py-2 rounded-lg bg-slate-700/60 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              <option value="ALL">All</option>
+              {TrainStatuses.map((status) => (
+                <option key={status} value={status}>
+                  {status.replaceAll("_", " ")}
+                </option>
+              ))}
+            </select>
 
             <input
               type="text"
