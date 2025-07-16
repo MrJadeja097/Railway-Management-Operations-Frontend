@@ -1,20 +1,14 @@
 import type { FC } from "react";
 import { Route, Routes } from "react-router";
-import { ProductList, ProductList2 } from "./components";
+import { HomeComponent } from "./components/Home";
 
-export const ProductRoutes: FC = () => {
+
+export const HomeRoute: FC = () => {
   return (
     <>
       <Routes>
-        <Route index element={<ProductList2 />} />
+        <Route index path="" element={<HomeComponent />} />
       </Routes>
-      <Routes>
-        <Route index element={<ProductList />} />
-      </Routes>
-      <Routes>
-        <Route index element={<ProductList2 />} />
-      </Routes>
-      ;
     </>
   );
 };
