@@ -1,5 +1,5 @@
 
-const TrainStatuses = [
+export const TrainStatuses = [
   "ACTIVE",
   "GROUNDED",
   "UNDER_MAINTENANCE",
