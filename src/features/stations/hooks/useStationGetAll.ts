@@ -12,7 +12,7 @@ export const useStationGetAll = () => {
         const response = await getAllStation()
         setStation(response);
       } catch (error) {
-        console.error("Error fetching active routes:", error);
+        console.error("Error fetching stations:", error);
       } finally {
         setLoading(false);
       }
