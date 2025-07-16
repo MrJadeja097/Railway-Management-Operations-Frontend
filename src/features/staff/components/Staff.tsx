@@ -1,4 +1,4 @@
-import { useStaffGetAll } from "../hooks/useStaffGetAll";
+import { useStaffGetAll } from "../hooks";
 import { StaffCard } from "./StaffCard";
 
 export const StaffComponent: React.FC = () => {
