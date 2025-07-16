@@ -1,4 +1,4 @@
-import { useTrainGetAll } from "../hooks/useTrainGetAll";
+import { useTrainGetAll } from "../hooks";
 import { TrainCard } from "./TrainCard";
 
 
