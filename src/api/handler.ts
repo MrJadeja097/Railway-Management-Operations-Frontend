@@ -20,7 +20,6 @@ apiHandler.interceptors.request.use(
     // Example: Attach auth token dynamically if available
     const token = localStorage.getItem("access-token");
     if (token) {
-      console.log(token, 'token--------');
       config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
