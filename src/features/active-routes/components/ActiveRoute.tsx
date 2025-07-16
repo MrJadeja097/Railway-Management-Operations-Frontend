@@ -78,7 +78,7 @@ export const ActiveRoutes: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {filteredRoutes.length > 0 ? (
             filteredRoutes.map((route) => (
               <ActiveRouteCard key={route.id} route={route} />
