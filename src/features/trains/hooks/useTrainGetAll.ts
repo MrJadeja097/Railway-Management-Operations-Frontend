@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { Train } from "../models";
 import { getAllTrain } from "../../../api";
 
@@ -6,20 +6,21 @@ export const useTrainGetAll = () => {
   const [trains, setTrains] = useState<Train[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchRoutes = async () => {
-      try {
-        const response = await getAllTrain()
-        setTrains(response);
-      } catch (error) {
-        console.error("Error fetching Trains :", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRoutes();
+  const fetchTrain = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getAllTrain();
+      setTrains(data);
+    } catch (error) {
+      console.error("Failed to fetch train:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return { trains, loading };
+  useEffect(() => {
+    fetchTrain();
+  }, [fetchTrain]);
+
+  return { trains, loading, fetchTrain };
 };

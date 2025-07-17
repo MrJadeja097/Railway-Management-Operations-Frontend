@@ -49,3 +49,9 @@ export const deleteStaff = async (id:number) => {
     const { data } = await apiHandler.delete(`/staff/${id}`);
     return data;
 }
+
+export const updateStaff = async (id: number, payload: Partial<Staff>): Promise<Staff> => {
+  const { data } = await apiHandler.post<Staff>(`/staff/${id}`, payload);
+  console.log("✅ Sent update staff request");
+  return data;
+};

@@ -1,2 +1,2 @@
-export * from "./trains";
+export * from "./TrainSchema";
 export * from './TrainInterface'
