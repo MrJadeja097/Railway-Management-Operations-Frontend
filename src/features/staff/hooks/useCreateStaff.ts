@@ -1,4 +1,3 @@
-// src/features/staff/hooks/useStaff.ts
 import { useCallback } from "react";
 import { createStaff } from "../../../api";
 

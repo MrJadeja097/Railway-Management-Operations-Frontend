@@ -1,10 +1,23 @@
+import { useCallback } from "react";
+import { useDeleteStaff } from "../hooks/useDeleteStaff";
 import type { Staff } from "../models";
 
 interface Props {
   person: Staff;
+  onDeleted: () => void; 
 }
 
-export const StaffCard: React.FC<Props> = ({ person }) => {
+
+export const StaffCard: React.FC<Props> = ({ person, onDeleted }) => {
+    const deleteStaff = useDeleteStaff();
+
+  const handleDelete = useCallback(async () => {
+    if (confirm(`Are you sure you want to delete ${person.firstName}?`)) {
+      await deleteStaff(person.id);
+      onDeleted(); 
+    }
+  }, [deleteStaff, person.id, person.firstName, onDeleted]);
+
   return (
     <div
       key={person.id}
@@ -75,6 +88,13 @@ export const StaffCard: React.FC<Props> = ({ person }) => {
                 day: "numeric",
               })}
             </span>
+
+             <button
+            onClick={handleDelete}
+            className="px-3 py-1 ml-4 bg-red-600/80 text-xs text-white rounded hover:bg-red-700 transition-colors"
+          >
+            Delete
+          </button>
           </div>
         </div>
       </div>
