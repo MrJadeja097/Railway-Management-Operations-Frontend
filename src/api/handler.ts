@@ -1,7 +1,7 @@
 // axios  setup
-import axios, { type AxiosInstance } from "axios";
+import axios, { AxiosError, type AxiosInstance } from "axios";
 import { VITE_API_URL } from "../config";
-
+import { toast } from "react-toastify";
 
 const apiHandler: AxiosInstance = axios.create({
   baseURL: VITE_API_URL,
@@ -9,12 +9,11 @@ const apiHandler: AxiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-//   withCredentials: true, 
+  //   withCredentials: true,
 });
 
 apiHandler.interceptors.request.use(
   (config) => {
-
     const token = localStorage.getItem("access-token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -28,8 +27,12 @@ apiHandler.interceptors.response.use(
   (response) => response,
   (error) => {
     if (axios.isAxiosError(error)) {
-
+      const axiosError = error as AxiosError;
       console.error("API Error:", error.message);
+      if (axiosError.response && axiosError.response.status === 403) {
+        toast.error("You have not permission to do that action.");
+        throw new Error("Not allowed to that action..");
+      }
       if (error.response) {
         console.error("Status:", error.response.status);
       }

@@ -4,7 +4,7 @@ import { StaffCard } from "./StaffCard";
 import { AddStaffForm } from "./AddStaffForm";
 
 export const StaffComponent: React.FC = () => {
-  const { staff, loading } = useStaffGetAll();
+  const { staff, loading, fetchStaff } = useStaffGetAll();
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC">("NAME_ASC");
@@ -93,7 +93,7 @@ export const StaffComponent: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredStaff.length > 0 ? (
             filteredStaff.map((person) => (
-              <StaffCard key={person.id} person={person} />
+              <StaffCard key={person.id} person={person} onDeleted={fetchStaff}/>
             ))
           ) : (
             <p className="text-slate-400">No staff found.</p>
