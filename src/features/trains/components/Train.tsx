@@ -108,7 +108,7 @@ export const TrainComponent: React.FC = () => {
               <TrainCard key={train.id} train={train} />
             ))
           ) : (
-            <p className="text-slate-400">No trains match your filter.</p>
+            <p className="text-slate-400">No trains found.</p>
           )}
         </div>
       </div>

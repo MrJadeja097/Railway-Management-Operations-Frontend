@@ -43,7 +43,6 @@ export const TrainCard: React.FC<Props> = ({ train }) => {
 
         <div className="pt-4 border-t border-slate-700/50">
           <div className="flex items-center text-xs text-slate-500">
-            <span className="mr-2">⏰</span>
             <span>
               Created {new Date(train.createdAt).toLocaleDateString('en-US', {
                 year: 'numeric',

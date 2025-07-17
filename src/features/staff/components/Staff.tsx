@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useStaffGetAll } from "../hooks";
 import { StaffCard } from "./StaffCard";
+import { AddStaffForm } from "./AddStaffForm";
 
 export const StaffComponent: React.FC = () => {
   const { staff, loading } = useStaffGetAll();
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC">("NAME_ASC");
+  const [showAddForm, setShowAddForm] = useState(false); 
 
   const filteredStaff = staff
     .filter((person) => {
@@ -53,8 +55,13 @@ export const StaffComponent: React.FC = () => {
             <div className="w-20 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 shadow-lg shadow-cyan-400/30"></div>
           </div>
 
-
           <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4 md:mt-0">
+            <button
+              className="px-4 py-2.5 rounded-lg bg-[#511D43] text-slate-100 text-sm font-medium hover:bg-[#6a2658] border border-[#511D43] hover:border-[#D946EF] transition-all duration-300 shadow hover:shadow-[#D946EF]/40 cursor-pointer"
+              onClick={() => setShowAddForm(!showAddForm)}
+            >
+              {showAddForm ? "Close" : "+ Add Staff"}
+            </button>
 
             <select
               value={sortBy}
@@ -77,13 +84,19 @@ export const StaffComponent: React.FC = () => {
           </div>
         </div>
 
+        {showAddForm && ( 
+          <div className="mb-8 flex justify-center">
+            <AddStaffForm />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredStaff.length > 0 ? (
             filteredStaff.map((person) => (
               <StaffCard key={person.id} person={person} />
             ))
           ) : (
-            <p className="text-slate-400">No staff match your search.</p>
+            <p className="text-slate-400">No staff found.</p>
           )}
         </div>
       </div>
