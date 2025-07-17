@@ -8,7 +8,11 @@ import { useForm } from 'react-hook-form';
 import { useCreateStaff } from "../hooks/useCreateStaff";
 import { toast } from "react-toastify";
 
-export const AddStaffForm: React.FC = () => {
+interface AddStaffFormProps {
+  onCreated: () => void;
+}
+
+export const AddStaffForm: React.FC<AddStaffFormProps> = ({onCreated}) => {
   const {
     register,
     handleSubmit,
@@ -24,6 +28,7 @@ const onSubmit = async (data: StaffFormData) => {
   try {
     await createStaff(data);
     toast.success('Staff created successfully.!')
+    onCreated();
     reset();
   } catch (err) {
     console.error(" Failed to create staff", err);
