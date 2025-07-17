@@ -1,6 +1,11 @@
-import { type FC } from "react";
+import { ToastContainer } from "react-toastify";
 import { AppRoutes } from "./routes";
 
-export const App: FC = () => {
-  return <AppRoutes />;
+export const App = () => {
+  return (
+    <>
+      <AppRoutes />;
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
+  );
 };
