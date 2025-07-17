@@ -27,7 +27,6 @@ const onSubmit = async (data: StaffFormData) => {
     reset();
   } catch (err) {
     console.error(" Failed to create staff", err);
-    toast.error("Email exists altrady.")
   }
 };
 

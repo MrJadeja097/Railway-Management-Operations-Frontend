@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import type { Role, Staff } from "../features/staff/models";
 import apiHandler from "./handler";
+import { toast } from "react-toastify";
 
 interface CreateStaffPayload {
   firstName: string;
@@ -34,18 +35,17 @@ export const createStaff = async (payload: CreateStaffPayload): Promise<Staff> =
 
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      if (axiosError.response && axiosError.response.status === 500) {
-        console.error("Email already exists.");
+    if (axios.isAxiosError(error) && error.response && error.response.status === 500) {
+        toast.error("Email already exists.");
         throw new Error("Email already exists.");
-      } else {
-        console.error("An error occurred while creating the staff member.");
-        throw new Error("An error occurred while creating the staff member.");
+      } 
+      else{
+        throw new Error("Unknown Error")
       }
-    } else {
-      console.error("An unknown error occurred:", error);
-      throw new Error("An unknown error occurred.");
-    }
-  }
+    } 
 };
+
+export const deleteStaff = async (id:number) => {
+    const { data } = await apiHandler.delete(`/staff/${id}`);
+    return data;
+}
