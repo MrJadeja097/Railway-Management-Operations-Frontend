@@ -78,7 +78,7 @@ export const StationComponent: React.FC = () => {
               <StationCard key={st.id} station={st} />
             ))
           ) : (
-            <p className="text-slate-400">No stations match your search.</p>
+            <p className="text-slate-400">No stations found.</p>
           )}
         </div>
       </div>

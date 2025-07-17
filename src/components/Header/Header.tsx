@@ -2,7 +2,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthProvider";
 
 export const Header = () => {
-  const { token, logout } = useAuth();
+  const { token, userName, role, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -110,7 +110,13 @@ export const Header = () => {
             )}
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
+            {token && (
+              <div className="flex flex-col items-end text-right text-sm text-gray-200">
+                <span className="font-medium">{userName}</span>
+                <span className="text-xs text-gray-400">{role}</span>
+              </div>
+            )}
             {token ? (
               <button
                 onClick={handleLogout}

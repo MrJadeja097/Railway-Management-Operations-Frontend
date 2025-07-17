@@ -67,7 +67,6 @@ export const StaffCard: React.FC<Props> = ({ person }) => {
 
         <div className="pt-4 border-t border-slate-700/50">
           <div className="flex items-center text-xs text-slate-500">
-            <span className="mr-2">⏰</span>
             <span>
               Joined{" "}
               {new Date(person.createdAt).toLocaleDateString("en-US", {
