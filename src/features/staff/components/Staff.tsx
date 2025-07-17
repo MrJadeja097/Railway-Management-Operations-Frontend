@@ -86,7 +86,7 @@ export const StaffComponent: React.FC = () => {
 
         {showAddForm && ( 
           <div className="mb-8 flex justify-center">
-            <AddStaffForm />
+            <AddStaffForm onCreated={fetchStaff}/>
           </div>
         )}
 

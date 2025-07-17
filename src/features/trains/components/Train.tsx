@@ -2,14 +2,19 @@ import React, { useState } from "react";
 import { useTrainGetAll } from "../hooks";
 import { TrainCard } from "./TrainCard";
 import { TrainStatuses, type TrainStatus } from "../models";
+import { CreateTrainForm } from "./CreateTrianForm";
+import { useAuth } from "../../auth/AuthProvider";
 
 export const TrainComponent: React.FC = () => {
-  const { trains, loading } = useTrainGetAll();
+  const { token } = useAuth();
+
+  const { trains, loading, fetchTrain } = useTrainGetAll();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<TrainStatus | "ALL">("ALL");
   const [sortBy, setSortBy] = useState<
     "NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC"
   >("NAME_ASC");
+  const [showAddForm, setShowAddForm] = useState(false);
 
   const filteredTrains = trains
     .filter((train) => {
@@ -63,6 +68,15 @@ export const TrainComponent: React.FC = () => {
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4 md:mt-0">
+            {token && (
+              <button
+                className="px-4 py-2.5 rounded-lg bg-[#511D43] text-slate-100 text-sm font-medium hover:bg-[#6a2658] border border-[#511D43] hover:border-[#D946EF] transition-all duration-300 shadow hover:shadow-[#D946EF]/40 cursor-pointer"
+                onClick={() => setShowAddForm(!showAddForm)}
+              >
+                {showAddForm ? "Close" : "+ Add Train"}
+              </button>
+            )}
+
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
@@ -101,6 +115,12 @@ export const TrainComponent: React.FC = () => {
             />
           </div>
         </div>
+
+        {showAddForm && (
+          <div className="mb-8 flex justify-center">
+            <CreateTrainForm onCreated={fetchTrain} />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredTrains.length > 0 ? (
