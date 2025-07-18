@@ -17,3 +17,8 @@ export const deleteTrain = async (id:number) => {
     const { data } = await apiHandler.delete(`/trains/${id}`);
     return data;
 }
+
+export const updateTrain = async (id: number, payload: Partial<Train>): Promise<Train> => {
+  const { data } = await apiHandler.patch<Train>(`/trains/${id}`, payload);
+  return data;
+};
