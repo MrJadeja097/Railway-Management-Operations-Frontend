@@ -125,7 +125,7 @@ export const TrainComponent: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredTrains.length > 0 ? (
             filteredTrains.map((train) => (
-              <TrainCard key={train.id} train={train} />
+              <TrainCard key={train.id} train={train} onDeleted={fetchTrain}/>
             ))
           ) : (
             <p className="text-slate-400">No trains found.</p>
