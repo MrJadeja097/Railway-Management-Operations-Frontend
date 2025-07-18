@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { useTrainGetAll } from "../hooks";
 import { TrainCard } from "./TrainCard";
-import { TrainStatuses, type TrainStatus } from "../models";
+import { TrainStatuses, type Train, type TrainStatus } from "../models";
 import { CreateTrainForm } from "./CreateTrianForm";
 import { useAuth } from "../../auth/AuthProvider";
+import { getAllTrain } from "../../../api";
+import { useFetchAll } from "../../../Hooks";
 
 export const TrainComponent: React.FC = () => {
   const { token } = useAuth();
 
-  const { trains, loading, fetchTrain } = useTrainGetAll();
+    const { data, loading, fetchAll } = useFetchAll<Train>(getAllTrain);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<TrainStatus | "ALL">("ALL");
   const [sortBy, setSortBy] = useState<
@@ -16,7 +17,7 @@ export const TrainComponent: React.FC = () => {
   >("NAME_ASC");
   const [showAddForm, setShowAddForm] = useState(false);
 
-  const filteredTrains = trains
+  const filteredTrains = data
     .filter((train) => {
       const query = search.toLowerCase();
 
@@ -118,14 +119,14 @@ export const TrainComponent: React.FC = () => {
 
         {showAddForm && (
           <div className="mb-8 flex justify-center">
-            <CreateTrainForm onCreated={fetchTrain} />
+            <CreateTrainForm onCreated={fetchAll} />
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredTrains.length > 0 ? (
             filteredTrains.map((train) => (
-              <TrainCard key={train.id} train={train} onDeleted={fetchTrain} onUpdated={fetchTrain}/>
+              <TrainCard key={train.id} train={train} onDeleted={fetchAll} onUpdated={fetchAll}/>
             ))
           ) : (
             <p className="text-slate-400">No trains found.</p>

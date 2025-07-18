@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { useStaffGetAll } from "../hooks";
 import { StaffCard } from "./StaffCard";
 import { AddStaffForm } from "./AddStaffForm";
+import type { Staff } from "../models";
+import { useFetchAll } from "../../../Hooks";
+import { getAllStaff} from "../../../api";
 
 export const StaffComponent: React.FC = () => {
-  const { staff, loading, fetchStaff } = useStaffGetAll();
+  const { data, loading, fetchAll } = useFetchAll<Staff>(getAllStaff);
+
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC">("NAME_ASC");
   const [showAddForm, setShowAddForm] = useState(false); 
 
-  const filteredStaff = staff
+  const filteredStaff = data
     .filter((person) => {
       const q = search.toLowerCase();
       return (
@@ -86,14 +89,14 @@ export const StaffComponent: React.FC = () => {
 
         {showAddForm && ( 
           <div className="mb-8 flex justify-center">
-            <AddStaffForm onCreated={fetchStaff}/>
+            <AddStaffForm onCreated={fetchAll}/>
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredStaff.length > 0 ? (
             filteredStaff.map((person) => (
-              <StaffCard key={person.id} person={person} onDeleted={fetchStaff}/>
+              <StaffCard key={person.id} person={person} onDeleted={fetchAll}/>
             ))
           ) : (
             <p className="text-slate-400">No staff found.</p>

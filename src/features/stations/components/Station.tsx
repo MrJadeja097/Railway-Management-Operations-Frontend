@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import { useStationGetAll } from "../hooks";
 import StationCard from "./StationCard";
 import { useAuth } from "../../auth/AuthProvider";
 import { CreateStationForm } from "./CreateStationForm";
+import { getAllStation } from "../../../api";
+import type { Station } from "../models";
+import { useFetchAll } from "../../../Hooks";
 
 export const StationComponent: React.FC = () => {
-    const { token } = useAuth();
+  const { token } = useAuth();
 
-  const { station, loading, fetchStation } = useStationGetAll();
+  const { data, loading, fetchAll } = useFetchAll<Station>(getAllStation);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<
     "NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC"
   >("NAME_ASC");
   const [showAddForm, setShowAddForm] = useState(false);
 
-  const filteredStations = station
+  const filteredStations = data
     .filter((st) => {
       const q = search.toLowerCase();
       return st.name.toLowerCase().includes(q);
@@ -84,14 +86,15 @@ export const StationComponent: React.FC = () => {
         </div>
 
         {showAddForm && (
-                  <div className="mb-8 flex justify-center">
-                    <CreateStationForm onCreated={fetchStation} />                  </div>
-                )}
+          <div className="mb-8 flex justify-center">
+            <CreateStationForm onCreated={fetchAll} />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredStations.length > 0 ? (
             filteredStations.map((st) => (
-              <StationCard key={st.id} station={st} />
+              <StationCard key={st.id} station={st} onDeleted={fetchAll} />
             ))
           ) : (
             <p className="text-slate-400">No stations found.</p>

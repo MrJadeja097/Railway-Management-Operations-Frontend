@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { useRailLineGetAll } from "../hooks";
 import { RailLineCard } from "./RailLineCard";
+import { useFetchAll } from "../../../Hooks";
+import type { RailLine } from "../models";
+import { getAllRailLine } from "../../../api";
 
 export const RailLineComponent: React.FC = () => {
-  const { railLine, loading } = useRailLineGetAll();
+  const { data, loading, fetchAll } = useFetchAll<RailLine>(getAllRailLine);
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC">("NAME_ASC");
 
-  const filteredRailLines = railLine
+  const filteredRailLines = data
     .filter((line) => {
       const q = search.toLowerCase();
       return (

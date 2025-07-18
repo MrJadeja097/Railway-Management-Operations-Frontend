@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { useActiveRoutes } from "../hooks";
 import { ActiveRouteCard } from "./ActiveRouteCard";
+import { useFetchAll } from "../../../Hooks";
+import type { ActiveRoute } from "../models";
+import { getAllActiveRoutes } from "../../../api";
 
 export const ActiveRoutes: React.FC = () => {
-  const { routes, loading } = useActiveRoutes();
+  const { data, loading } = useFetchAll<ActiveRoute>(getAllActiveRoutes);
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC">("NAME_ASC");
 
-  const filteredRoutes = routes
+  const filteredRoutes = data
     .filter((route) => {
       const q = search.toLowerCase();
       return (
