@@ -4,7 +4,7 @@ import { AppRoutes } from "./routes";
 export const App = () => {
   return (
     <>
-      <AppRoutes />;
+      <AppRoutes />
       <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
