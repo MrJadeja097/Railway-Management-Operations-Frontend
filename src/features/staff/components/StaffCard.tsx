@@ -1,6 +1,7 @@
-import { useCallback } from "react";
-import { useDeleteStaff } from "../hooks/useDeleteStaff";
 import type { Staff } from "../models";
+import { useConfirmDelete } from "../../../Hooks";
+import { deleteStaff } from "../../../api";
+import { DeleteButton } from "../../../components/Buttons/Delete";
 
 interface Props {
   person: Staff;
@@ -9,14 +10,10 @@ interface Props {
 
 
 export const StaffCard: React.FC<Props> = ({ person, onDeleted }) => {
-    const deleteStaff = useDeleteStaff();
 
-  const handleDelete = useCallback(async () => {
-    if (confirm(`Are you sure you want to delete ${person.firstName}?`)) {
-      await deleteStaff(person.id);
-      onDeleted(); 
-    }
-  }, [deleteStaff, person.id, person.firstName, onDeleted]);
+
+  const confirmDelete = useConfirmDelete(deleteStaff, "Staff", onDeleted);
+
 
   return (
     <div
@@ -77,25 +74,16 @@ export const StaffCard: React.FC<Props> = ({ person, onDeleted }) => {
             </div>
           )}
         </div>
-
-        <div className="pt-4 border-t border-slate-700/50">
-          <div className="flex items-center text-xs text-slate-500">
-            <span>
-              Joined{" "}
-              {new Date(person.createdAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </span>
-
-             <button
-            onClick={handleDelete}
-            className="px-3 py-1 ml-4 bg-red-600/80 text-xs text-white rounded hover:bg-red-700 transition-colors"
-          >
-            Delete
-          </button>
-          </div>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-slate-700/50 pt-4 text-xs text-slate-500">
+          <span>
+            Created{" "}
+            {new Date(person.createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
+              <DeleteButton onClick={() => confirmDelete(person.id)} />
         </div>
       </div>
     </div>
