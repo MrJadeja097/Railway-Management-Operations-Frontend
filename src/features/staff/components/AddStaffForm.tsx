@@ -89,7 +89,7 @@ return (
       </div>
 
       <div>
-        <label className="block text-slate-200 mb-1">Email</label>
+        <label className="block text-slate-200 mb-1">Password</label>
         <input
           {...register("password")}
           className="w-full p-2 rounded bg-slate-700 text-slate-100"
