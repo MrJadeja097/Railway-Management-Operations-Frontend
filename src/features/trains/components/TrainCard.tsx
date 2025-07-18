@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from "react";
 import type { Train, TrainFormData } from "../models";
-import { useDeleteTrain } from "../hooks/useDeleteTrain";
 import { useUpdateTrain } from "../hooks";
 import { TrainUpdateForm } from "./UpdateTrainForm";
 import { toast } from "react-toastify";
 import { useAuth } from "../../auth/AuthProvider";
+import { useConfirmDelete } from "../../../Hooks";
+import { DeleteButton } from "../../../components/Buttons/Delete";
+import { deleteTrain } from "../../../api";
+
 
 interface Props {
   train: Train;
@@ -13,27 +16,24 @@ interface Props {
 }
 
 export const TrainCard: React.FC<Props> = ({ train, onDeleted, onUpdated }) => {
-  const { token } = useAuth()
-  const deleteTrain = useDeleteTrain();
+  const { token } = useAuth();
   const updateTrain = useUpdateTrain(onUpdated);
   const [isEditing, setIsEditing] = useState(false);
+  
+  const confirmDelete = useConfirmDelete(deleteTrain, "Train", onDeleted);
 
-  const handleDelete = useCallback(async () => {
-    if (confirm(`Are you sure you want to delete ${train.name}?`)) {
-      await deleteTrain(train.id);
-      onDeleted();
-    }
-  }, [deleteTrain, train.id, train.name, onDeleted]);
-
-  const handleUpdate = useCallback(async (data: TrainFormData) => {
-    try{
-      await updateTrain(train.id, data);
-      setIsEditing(false);
-      toast.success('Train updated successfully.')
-    } catch(error) {
-      toast.error("Error in updating trian.")
-    }
-  }, [updateTrain, train.id]);
+  const handleUpdate = useCallback(
+    async (data: TrainFormData) => {
+      try {
+        await updateTrain(train.id, data);
+        setIsEditing(false);
+        toast.success("Train updated successfully.");
+      } catch (error) {
+        toast.error("Error in updating train.");
+      }
+    },
+    [updateTrain, train.id]
+  );
 
   return (
     <div className="group bg-slate-800/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-300 overflow-hidden border border-slate-700/50 hover:border-indigo-500/30 p-6">
@@ -63,7 +63,7 @@ export const TrainCard: React.FC<Props> = ({ train, onDeleted, onUpdated }) => {
               <p className="font-medium text-slate-400 mb-1">📌 Status:</p>
               <p className="text-slate-200">{train.status}</p>
             </div>
-            
+
             <div>
               <p className="font-medium text-slate-400 mb-1">💨 Top Speed:</p>
               <p className="text-slate-200">{train.top_speed} km/h</p>
@@ -76,29 +76,27 @@ export const TrainCard: React.FC<Props> = ({ train, onDeleted, onUpdated }) => {
 
           <div className="pt-4 border-t border-slate-700/50 flex items-center text-xs text-slate-500">
             <span>
-              Created {new Date(train.createdAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
+              Created{" "}
+              {new Date(train.createdAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric",
               })}
             </span>
 
-           {token && ( <button
-              onClick={handleDelete}
-              className="px-3 py-1 ml-4 bg-red-600/80 text-xs text-white rounded hover:bg-red-700 transition-colors"
-            >
-              Delete
-            </button> )}
+            {token && <DeleteButton onClick={() => confirmDelete(train.id)} />}
 
-            {token && (<button
-              onClick={() => setIsEditing(true)}
-              className="px-3 py-1 ml-2 bg-yellow-500/80 text-xs text-white rounded hover:bg-yellow-600 transition-colors"
-            >
-              Edit
-            </button>)}
+            {token && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="px-3 py-1 ml-2 bg-yellow-500/80 text-xs text-white rounded hover:bg-yellow-600 transition-colors"
+              >
+                Edit
+              </button>
+            )}
           </div>
         </>
       )}
