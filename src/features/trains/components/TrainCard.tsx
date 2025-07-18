@@ -4,6 +4,7 @@ import { useDeleteTrain } from "../hooks/useDeleteTrain";
 import { useUpdateTrain } from "../hooks";
 import { TrainUpdateForm } from "./UpdateTrainForm";
 import { toast } from "react-toastify";
+import { useAuth } from "../../auth/AuthProvider";
 
 interface Props {
   train: Train;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export const TrainCard: React.FC<Props> = ({ train, onDeleted, onUpdated }) => {
+  const { token } = useAuth()
   const deleteTrain = useDeleteTrain();
   const updateTrain = useUpdateTrain(onUpdated);
   const [isEditing, setIsEditing] = useState(false);
@@ -84,19 +86,19 @@ export const TrainCard: React.FC<Props> = ({ train, onDeleted, onUpdated }) => {
               })}
             </span>
 
-            <button
+           {token && ( <button
               onClick={handleDelete}
               className="px-3 py-1 ml-4 bg-red-600/80 text-xs text-white rounded hover:bg-red-700 transition-colors"
             >
               Delete
-            </button>
+            </button> )}
 
-            <button
+            {token && (<button
               onClick={() => setIsEditing(true)}
               className="px-3 py-1 ml-2 bg-yellow-500/80 text-xs text-white rounded hover:bg-yellow-600 transition-colors"
             >
               Edit
-            </button>
+            </button>)}
           </div>
         </>
       )}
