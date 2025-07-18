@@ -1,2 +1,2 @@
-export * from "./stations";
+export * from "./StationSchema";
 export * from './StationInterface'
