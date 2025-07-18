@@ -1,13 +1,11 @@
-import React, { useCallback, useState } from "react";
-import type { Train, TrainFormData } from "../models";
-import { useUpdateTrain } from "../hooks";
+import React, { useState } from "react";
+import type { Train } from "../models";
 import { TrainUpdateForm } from "./UpdateTrainForm";
-import { toast } from "react-toastify";
 import { useAuth } from "../../auth/AuthProvider";
-import { useConfirmDelete } from "../../../Hooks";
+import { useConfirmDelete, useUpdate } from "../../../Hooks";
 import { DeleteButton } from "../../../components/Buttons/Delete";
-import { deleteTrain } from "../../../api";
-
+import { deleteTrain, updateTrain } from "../../../api";
+import { UpdateButton } from "../../../components";
 
 interface Props {
   train: Train;
@@ -17,30 +15,21 @@ interface Props {
 
 export const TrainCard: React.FC<Props> = ({ train, onDeleted, onUpdated }) => {
   const { token } = useAuth();
-  const updateTrain = useUpdateTrain(onUpdated);
   const [isEditing, setIsEditing] = useState(false);
-  
+
   const confirmDelete = useConfirmDelete(deleteTrain, "Train", onDeleted);
 
-  const handleUpdate = useCallback(
-    async (data: TrainFormData) => {
-      try {
-        await updateTrain(train.id, data);
-        setIsEditing(false);
-        toast.success("Train updated successfully.");
-      } catch (error) {
-        toast.error("Error in updating train.");
-      }
-    },
-    [updateTrain, train.id]
-  );
+  const update = useUpdate<Train>(updateTrain, "Train", onUpdated);
 
   return (
     <div className="group bg-slate-800/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-300 overflow-hidden border border-slate-700/50 hover:border-indigo-500/30 p-6">
       {isEditing ? (
         <TrainUpdateForm
           train={train}
-          onSubmit={handleUpdate}
+          onSubmit={async (data) => {
+            await update(train.id, data as unknown as Train);
+            setIsEditing(false);
+          }}
           onCancel={() => setIsEditing(false)}
         />
       ) : (
@@ -74,7 +63,7 @@ export const TrainCard: React.FC<Props> = ({ train, onDeleted, onUpdated }) => {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-700/50 flex items-center text-xs text-slate-500">
+          <div className="pt-4 border-t border-slate-700/50 flex justify-between items-center text-xs text-slate-500">
             <span>
               Created{" "}
               {new Date(train.createdAt).toLocaleDateString("en-US", {
@@ -87,15 +76,11 @@ export const TrainCard: React.FC<Props> = ({ train, onDeleted, onUpdated }) => {
               })}
             </span>
 
-            {token && <DeleteButton onClick={() => confirmDelete(train.id)} />}
-
             {token && (
-              <button
-                onClick={() => setIsEditing(true)}
-                className="px-3 py-1 ml-2 bg-yellow-500/80 text-xs text-white rounded hover:bg-yellow-600 transition-colors"
-              >
-                Edit
-              </button>
+              <div className="flex items-center">
+                <DeleteButton onClick={() => confirmDelete(train.id)} />
+                <UpdateButton onClick={() => setIsEditing(true)} />
+              </div>
             )}
           </div>
         </>
