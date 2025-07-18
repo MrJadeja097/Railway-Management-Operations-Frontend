@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useCallback } from "react";
 import type { Train } from "../models";
+import { useDeleteTrain } from "../hooks/useDeleteTrain";
 
 interface Props {
   train: Train;
+  onDeleted: () => void; 
 }
 
-export const TrainCard: React.FC<Props> = ({ train }) => {
+export const TrainCard: React.FC<Props> = ({ train, onDeleted }) => {
+      const deleteTrain = useDeleteTrain();
+
+       const handleDelete = useCallback(async () => {
+          if (confirm(`Are you sure you want to delete ${train.name}?`)) {
+            await deleteTrain(train.id);
+            onDeleted(); 
+          }
+        }, [deleteTrain, train.id, train.name, onDeleted]);
+  
   return (
     <div className="group bg-slate-800/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-300 overflow-hidden border border-slate-700/50 hover:border-indigo-500/30">
       <div className="p-6">
@@ -53,6 +64,13 @@ export const TrainCard: React.FC<Props> = ({ train }) => {
                 second: 'numeric'
               })}
             </span>
+
+            <button
+            onClick={handleDelete}
+            className="px-3 py-1 ml-4 bg-red-600/80 text-xs text-white rounded hover:bg-red-700 transition-colors"
+          >
+            Delete
+          </button>
           </div>
         </div>
       </div>

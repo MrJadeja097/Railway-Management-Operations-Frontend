@@ -11,4 +11,9 @@ export const getAllTrain =async () => {
 export const createTrain = async (payload : TrainFormData ) : Promise<Train> => {
    const response = await apiHandler.post<Train>("/trains", payload);
   return response.data;
-} 
+}
+
+export const deleteTrain = async (id:number) => {
+    const { data } = await apiHandler.delete(`/trains/${id}`);
+    return data;
+}

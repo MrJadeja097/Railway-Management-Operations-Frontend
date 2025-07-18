@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import type { Role, Staff } from "../features/staff/models";
 import apiHandler from "./handler";
 import { toast } from "react-toastify";
@@ -32,7 +32,6 @@ export const createStaff = async (payload: CreateStaffPayload): Promise<Staff> =
     } else {
       console.log("Sent a staff add request to backend & got no staff ID.");
     }
-
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response && error.response.status === 500) {
@@ -49,9 +48,3 @@ export const deleteStaff = async (id:number) => {
     const { data } = await apiHandler.delete(`/staff/${id}`);
     return data;
 }
-
-export const updateStaff = async (id: number, payload: Partial<Staff>): Promise<Staff> => {
-  const { data } = await apiHandler.post<Staff>(`/staff/${id}`, payload);
-  console.log("✅ Sent update staff request");
-  return data;
-};
