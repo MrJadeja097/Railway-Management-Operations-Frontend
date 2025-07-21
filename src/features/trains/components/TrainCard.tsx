@@ -34,6 +34,9 @@ export const TrainCard: React.FC<Props> = ({ train, onDeleted, onUpdated }) => {
         />
       ) : (
         <>
+        <div className="absolute top-4 right-4 w-16 h-14 flex items-center justify-center bg-gradient-to-br from-slate-800/60 to-slate-600/80 backdrop-blur-sm rounded-xl border border-slate-600/50 text-slate-200 text-base font-semibold group-hover:from-indigo-500/30  group-hover:border-indigo-500/30 transition-all duration-300">
+          <span className="ml-1 text-lg">ID: {train.id}</span>
+      </div>
           <div className="flex items-center mb-4">
             <div className="w-12 h-12 bg-gradient-to-br from-slate-700/80 to-slate-600/80 backdrop-blur-sm rounded-xl flex items-center justify-center mr-4 group-hover:from-indigo-500/20 group-hover:to-purple-500/20 transition-all duration-300 border border-slate-600/50 group-hover:border-indigo-400/30">
               🚆

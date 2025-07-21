@@ -13,9 +13,11 @@ export const createActieveRoute = async (payload: ActiveRouteFormData): Promise<
     const { data } = await apiHandler.post<ActiveRoute>("/routes/create-route", payload);
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response && error.response.status === 500) {
-        toast.error("Email already exists.");
-        throw new Error("Email already exists.");
+    if (axios.isAxiosError(error) && error.response)  {
+      console.log(error.response.data.message);
+      
+        toast.error(error.response.data.message);
+        throw new Error(error.response.data.message);
       } 
       else{
         throw new Error("Unknown Error")
