@@ -3,12 +3,20 @@ import { ActiveRouteCard } from "./ActiveRouteCard";
 import { useFetchAll } from "../../../Hooks";
 import type { ActiveRoute } from "../models";
 import { getAllActiveRoutes } from "../../../api";
+import { useAuth } from "../../auth/AuthProvider";
+import { CreateActiveRouteForm } from "./CreateActiveRouteForm";
 
 export const ActiveRoutes: React.FC = () => {
-  const { data, loading } = useFetchAll<ActiveRoute>(getAllActiveRoutes);
+  const { token } = useAuth();
 
+  const { data, loading, fetchAll } =
+    useFetchAll<ActiveRoute>(getAllActiveRoutes);
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC">("NAME_ASC");
+  const [sortBy, setSortBy] = useState<
+    "NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC"
+  >("NAME_ASC");
+
+  const [showAddForm, setShowAddForm] = useState(false);
 
   const filteredRoutes = data
     .filter((route) => {
@@ -59,6 +67,14 @@ export const ActiveRoutes: React.FC = () => {
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4 md:mt-0">
+            {token && (
+              <button
+                className="px-4 py-2.5 rounded-lg bg-[#511D43] text-slate-100 text-sm font-medium hover:bg-[#6a2658] border border-[#511D43] hover:border-[#D946EF] transition-all duration-300 shadow hover:shadow-[#D946EF]/40 cursor-pointer"
+                onClick={() => setShowAddForm(!showAddForm)}
+              >
+                {showAddForm ? "Close" : "+ Add Station"}
+              </button>
+            )}
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
@@ -79,6 +95,12 @@ export const ActiveRoutes: React.FC = () => {
             />
           </div>
         </div>
+
+        {showAddForm && (
+          <div className="mb-8 flex justify-center">
+            <CreateActiveRouteForm onCreated={fetchAll} />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 gap-6">
           {filteredRoutes.length > 0 ? (

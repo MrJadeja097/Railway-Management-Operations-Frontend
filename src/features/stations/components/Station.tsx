@@ -19,7 +19,7 @@ export const StationComponent: React.FC = () => {
   const filteredStations = data
     .filter((st) => {
       const q = search.toLowerCase();
-      return st.name.toLowerCase().includes(q);
+      return st.name.toLowerCase().includes(q) || st.railLine.name.toLowerCase().includes(q);
     })
     .sort((a, b) => {
       switch (sortBy) {

@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "react-toastify";
 import { TrainSchema, type TrainFormData } from "../models";
-import { useCreateTrain } from "../hooks/useCreateTrain";
+import { useCreate } from "../../../Hooks";
+import { createTrain } from "../../../api";
 
 interface Props {
   onCreated: () => void;
@@ -19,22 +19,13 @@ export const CreateTrainForm: React.FC<Props> = ({ onCreated }) => {
     resolver: zodResolver(TrainSchema),
   });
 
-  const createTrain = useCreateTrain(onCreated);
-
-  const onSubmit = async (data: TrainFormData) => {
-    try {
-      await createTrain(data);
-      toast.success("Train created successfully!");
-      reset();
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to create train.");
-    }
-  };
+  const create = useCreate(createTrain, "Train", onCreated);
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(async (data: TrainFormData) => {
+        await create(data , reset)
+      })}
       className="bg-slate-800/60 backdrop-blur p-6 rounded-xl border border-slate-700/50 shadow-lg min-w-xl mx-auto"
     >
       <h2 className="text-xl text-indigo-100 mb-4">Add New Train</h2>
