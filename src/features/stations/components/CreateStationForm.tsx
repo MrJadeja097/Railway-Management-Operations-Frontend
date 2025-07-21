@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCreateStation } from "../hooks";
 import { StationSchema, type StationFormData } from "../models";
-import { toast } from "react-toastify";
+import { useCreate } from "../../../Hooks";
+import { createStation } from "../../../api";
 
 interface Props {
   onCreated: () => void;
@@ -19,23 +19,13 @@ export const CreateStationForm: React.FC<Props> = ({ onCreated }) => {
     resolver: zodResolver(StationSchema),
   });
 
-  const createStation = useCreateStation(onCreated);
-
-  const onSubmit = async (data: StationFormData) => {
-    try {
-      console.log("Going in hook");
-      await createStation(data);
-      toast.success("Station created successfully!");
-      reset();
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to create station.");
-    }
-  };
+  const create = useCreate(createStation, "Station", onCreated);
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(async (data: StationFormData) => {
+        await create(data, reset);
+      })}
       className="space-y-4 bg-slate-800/60 p-4 rounded-xl"
     >
       <div>

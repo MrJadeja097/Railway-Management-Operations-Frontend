@@ -5,8 +5,9 @@ import { type StaffFormData, StaffSchema } from "../models/StaffSchema";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { useCreateStaff } from "../hooks/useCreateStaff";
 import { toast } from "react-toastify";
+import { useCreate } from "../../../Hooks";
+import { createStaff } from "../../../api";
 
 interface AddStaffFormProps {
   onCreated: () => void;
@@ -22,23 +23,14 @@ export const AddStaffForm: React.FC<AddStaffFormProps> = ({onCreated}) => {
     resolver: zodResolver(StaffSchema),
   });
 
-const createStaff = useCreateStaff();
-
-const onSubmit = async (data: StaffFormData) => {
-  try {
-    await createStaff(data);
-    toast.success('Staff created successfully.!')
-    onCreated();
-    reset();
-  } catch (err) {
-    console.error(" Failed to create staff", err);
-  }
-};
+const create = useCreate(createStaff, "Staff", onCreated)
 
 
 return (
   <form
-    onSubmit={handleSubmit(onSubmit)}
+    onSubmit={handleSubmit(async (data : StaffFormData) => {
+      await create(data, reset)
+    })}
     className="bg-slate-800/60 backdrop-blur p-6 rounded-xl border border-slate-700/50 shadow-lg max-w-2xl"
   >
     <h2 className="text-xl text-cyan-100 mb-4">Add New Staff</h2>
