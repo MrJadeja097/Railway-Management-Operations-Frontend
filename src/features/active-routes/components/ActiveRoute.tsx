@@ -72,7 +72,7 @@ export const ActiveRoutes: React.FC = () => {
                 className="px-4 py-2.5 rounded-lg bg-[#511D43] text-slate-100 text-sm font-medium hover:bg-[#6a2658] border border-[#511D43] hover:border-[#D946EF] transition-all duration-300 shadow hover:shadow-[#D946EF]/40 cursor-pointer"
                 onClick={() => setShowAddForm(!showAddForm)}
               >
-                {showAddForm ? "Close" : "+ Add Station"}
+                {showAddForm ? "Close" : "+ Add Active Route"}
               </button>
             )}
             <select
