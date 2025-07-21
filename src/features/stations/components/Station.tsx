@@ -94,7 +94,7 @@ export const StationComponent: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredStations.length > 0 ? (
             filteredStations.map((st) => (
-              <StationCard key={st.id} station={st} onDeleted={fetchAll} />
+              <StationCard key={st.id} station={st} onDeleted={fetchAll} onUpdated={fetchAll} />
             ))
           ) : (
             <p className="text-slate-400">No stations found.</p>
