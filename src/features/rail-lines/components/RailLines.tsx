@@ -3,12 +3,19 @@ import { RailLineCard } from "./RailLineCard";
 import { useFetchAll } from "../../../Hooks";
 import type { RailLine } from "../models";
 import { getAllRailLine } from "../../../api";
+import { useAuth } from "../../auth/AuthProvider";
+import { CreateRailLineForm } from "./CreateRailLineForm";
 
 export const RailLineComponent: React.FC = () => {
+  const { token } = useAuth();
+
   const { data, loading, fetchAll } = useFetchAll<RailLine>(getAllRailLine);
 
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC">("NAME_ASC");
+  const [sortBy, setSortBy] = useState<
+    "NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC"
+  >("NAME_ASC");
+  const [showAddForm, setShowAddForm] = useState(false);
 
   const filteredRailLines = data
     .filter((line) => {
@@ -53,9 +60,15 @@ export const RailLineComponent: React.FC = () => {
             <div className="w-20 h-0.5 bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg shadow-yellow-400/30"></div>
           </div>
 
-
           <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4 md:mt-0">
-
+            {token && (
+              <button
+                className="px-4 py-2.5 rounded-lg bg-[#511D43] text-slate-100 text-sm font-medium hover:bg-[#6a2658] border border-[#511D43] hover:border-[#D946EF] transition-all duration-300 shadow hover:shadow-[#D946EF]/40 cursor-pointer"
+                onClick={() => setShowAddForm(!showAddForm)}
+              >
+                {showAddForm ? "Close" : "+ Add Rail Line"}
+              </button>
+            )}
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
@@ -77,8 +90,12 @@ export const RailLineComponent: React.FC = () => {
           </div>
         </div>
 
-        {loading && (
-          <p className="text-slate-300">Loading rail lines...</p>
+        {loading && <p className="text-slate-300">Loading rail lines...</p>}
+
+        {showAddForm && (
+          <div className="mb-8 flex justify-center">
+            <CreateRailLineForm onCreated={fetchAll} />
+          </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
