@@ -6,7 +6,7 @@ export const StaffRoutes: FC = () => {
   return (
     <>
       <Routes>
-        <Route index path="" element={<StaffComponent />} />
+        <Route index element={<StaffComponent />} />
       </Routes>
     </>
   );

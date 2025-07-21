@@ -34,6 +34,7 @@ apiHandler.interceptors.response.use(
         throw new Error("Not allowed to that action..");
       }
       if (error.response) {
+        toast.error(error.response.data.message)
         console.error("Status:", error.response.status);
       }
     } else {

@@ -52,5 +52,4 @@ export const StaffSchema = z.object({
     .min(2, { message: " Role  should have at least 2 characters!" }),
 });
 
-// TypeScript helper
 export type StaffFormData = z.infer<typeof StaffSchema>;
