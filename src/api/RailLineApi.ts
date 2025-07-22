@@ -22,3 +22,8 @@ export const createRailLine = async (payload: RailLineFormData): Promise<RailLin
       }
     } 
 };
+
+export const deleteRailLine = async (id:number) => {
+    const { data } = await apiHandler.delete(`/rail-lines/${id}`);
+    return data;
+}
