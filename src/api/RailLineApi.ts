@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import type { RailLine, RailLineFormData } from "../features/rail-lines/models";
+import type { RailLine, RailLineFormData, RailLineUpdateFormData } from "../features/rail-lines/models";
 import apiHandler from "./handler";
 
 export const getAllRailLine =async () => {
@@ -27,3 +27,8 @@ export const deleteRailLine = async (id:number) => {
     const { data } = await apiHandler.delete(`/rail-lines/${id}`);
     return data;
 }
+
+export const updateRailLine = async (id: number, payload: Partial<RailLine>): Promise<RailLine> => {
+  const { data } = await apiHandler.patch<RailLine>(`/rail-lines/${id}`, payload);
+  return data;
+};

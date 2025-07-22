@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { toast } from "react-toastify";
 
-export function useUpdate< TPayload>(
-  updateFn: (id: number, data: TPayload) => Promise<TPayload>,
+export function useUpdate<TPayload, TPayloadResponse = TPayload>(
+  updateFn: (id: number, data: TPayload) => Promise<TPayloadResponse>,
   entityName: string,
   onUpdated: () => void
 ) {
