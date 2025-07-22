@@ -101,7 +101,7 @@ export const RailLineComponent: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredRailLines.length > 0 ? (
             filteredRailLines.map((line) => (
-              <RailLineCard key={line.id} railLine={line} onDeleted={fetchAll}/>
+              <RailLineCard key={line.id} railLine={line} onDeleted={fetchAll} onUpdated={fetchAll}/>
             ))
           ) : (
             <p className="text-slate-400">No rail lines found.</p>
