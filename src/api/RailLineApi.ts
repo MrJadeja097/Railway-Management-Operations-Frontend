@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import type { RailLine, RailLineFormData, RailLineUpdateFormData } from "../features/rail-lines/models";
+import type { RailLine, RailLineFormData } from "../features/rail-lines/models";
 import apiHandler from "./handler";
 
 export const getAllRailLine =async () => {

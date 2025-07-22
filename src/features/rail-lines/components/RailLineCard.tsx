@@ -56,10 +56,10 @@ export const RailLineCard: React.FC<Props> = ({
             </div>
             <div className="pt-4 border-t border-slate-700/50">
               <p className="text-sm text-slate-400 mb-1">📝 Description</p>
-              <div className="text-slate-200 text-sm mb-6"> {/* Increased margin-bottom */}
+              <div className="text-slate-200 text-sm mb-6">
                 {railLine.description}
               </div>
-              <div className="mb-4"> {/* Added margin-bottom */}
+              <div className="mb-4">
                 <p className="text-sm text-slate-400 mb-1">🚉 Start Station</p>
                 <div className="text-slate-200 text-sm">
                   {railLine.startStation.name}
