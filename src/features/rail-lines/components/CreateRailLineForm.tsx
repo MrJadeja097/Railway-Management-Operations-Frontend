@@ -27,7 +27,7 @@ export const CreateRailLineForm: React.FC<{ onCreated: () => void }> = ({ onCrea
       <h2 className="text-xl text-slate-100">Create Rail Line</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Rail Line Details Section */}
+
         <div className="space-y-4">
           <h3 className="text-slate-200">Rail Line Details</h3>
           <div>
@@ -50,7 +50,6 @@ export const CreateRailLineForm: React.FC<{ onCreated: () => void }> = ({ onCrea
           </div>
         </div>
 
-        {/* Start Station Section */}
         <div className="space-y-4">
           <h3 className="text-slate-200">Start Station</h3>
           <div>
@@ -89,7 +88,6 @@ export const CreateRailLineForm: React.FC<{ onCreated: () => void }> = ({ onCrea
           </div>
         </div>
 
-        {/* End Station Section */}
         <div className="space-y-4">
           <h3 className="text-slate-200">End Station</h3>
           <div>

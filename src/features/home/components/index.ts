@@ -1,2 +1,1 @@
-export * from "./ProductList";
-export * from './plist2'
+export * from './Home'
