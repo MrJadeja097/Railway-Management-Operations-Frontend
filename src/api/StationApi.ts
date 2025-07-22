@@ -28,7 +28,7 @@ export const deleteStation = async (id:number) => {
     return data;
 }
 
-export const updateStation = async (id: number, payload: Partial<Station>): Promise<Train> => {
+export const updateStation = async (id: number, payload: Partial<Station>): Promise<Station> => {
   const { data } = await apiHandler.patch<Station>(`/stations/${id}`, payload);
   return data;
 };

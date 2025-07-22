@@ -9,11 +9,7 @@ interface Props {
   onCancel: () => void;
 }
 
-export const UpdateStationForm: React.FC<Props> = ({
-  station,
-  onSubmit,
-  onCancel,
-}) => {
+export const UpdateStationForm: React.FC<Props> = ({station,onSubmit,onCancel}) => {
   const {
     register,
     handleSubmit,
