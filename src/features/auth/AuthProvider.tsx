@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
 import type { AuthResponse } from "./models/AuthResponse";
+import { toast } from "react-toastify";
 
 interface AuthContextProps {
   userName: string | null;
@@ -33,6 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem("access-token");
     localStorage.removeItem("user-name");
     localStorage.removeItem("user-role");
+    toast.warning("Logged Out !")
   };
 
   const value = useMemo(() => ({ token,  login, logout, userName, role }), [token, userName, role]);
