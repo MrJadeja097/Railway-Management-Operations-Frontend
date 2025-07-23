@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthProvider";
-import { LogInApi } from "../../api";
+import { useAuth } from "../AuthProvider";
+import { LogInApi } from "../../../api";
 import { toast } from "react-toastify";
 
 export const LoginForm: React.FC = () => {
