@@ -1,47 +1,54 @@
 import React, { useState } from "react";
 import { RailLineCard } from "./RailLineCard";
-import { useFetchAll } from "../../../Hooks";
-import type { RailLine } from "../models";
 import { getAllRailLine } from "../../../api";
 import { useAuth } from "../../auth/AuthProvider";
 import { CreateRailLineForm } from "./CreateRailLineForm";
+import { useQuery } from "@tanstack/react-query";
 
 export const RailLineComponent: React.FC = () => {
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["rail-line"],
+    queryFn: getAllRailLine,
+    staleTime: 15 * 60 * 1000,
+  });
   const { token } = useAuth();
-
-  const { data, loading, fetchAll } = useFetchAll<RailLine>(getAllRailLine);
-
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<
     "NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC"
   >("NAME_ASC");
   const [showAddForm, setShowAddForm] = useState(false);
 
-  const filteredRailLines = data
-    .filter((line) => {
-      const q = search.toLowerCase();
-      return (
-        line.name.toLowerCase().includes(q) ||
-        line.startStation?.name.toLowerCase().includes(q) ||
-        line.endStation?.name.toLowerCase().includes(q)
-      );
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case "NAME_ASC":
-          return a.name.localeCompare(b.name);
-        case "NAME_DESC":
-          return b.name.localeCompare(a.name);
-        case "ID_ASC":
-          return a.id - b.id;
-        case "ID_DESC":
-          return b.id - a.id;
-        default:
-          return 0;
-      }
-    });
+  const filteredRailLines = React.useMemo(() => {
+    if (!isLoading && data) {
+      return data
+        .filter((line) => {
+          const q = search.toLowerCase();
+          return (
+            line.name.toLowerCase().includes(q) ||
+            line.startStation?.name.toLowerCase().includes(q) ||
+            line.endStation?.name.toLowerCase().includes(q)
+          );
+        })
+        .sort((a, b) => {
+          switch (sortBy) {
+            case "NAME_ASC":
+              return a.name.localeCompare(b.name);
+            case "NAME_DESC":
+              return b.name.localeCompare(a.name);
+            case "ID_ASC":
+              return a.id - b.id;
+            case "ID_DESC":
+              return b.id - a.id;
+            default:
+              return 0;
+          }
+        });
+    } else {
+      return [];
+    }
+  }, [data, isLoading, search, sortBy]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white">
         Loading Rail Line Data...
@@ -90,18 +97,21 @@ export const RailLineComponent: React.FC = () => {
           </div>
         </div>
 
-        {loading && <p className="text-slate-300">Loading rail lines...</p>}
-
         {showAddForm && (
           <div className="mb-8 flex justify-center">
-            <CreateRailLineForm onCreated={fetchAll} />
+            <CreateRailLineForm onCreated={refetch} />
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredRailLines.length > 0 ? (
             filteredRailLines.map((line) => (
-              <RailLineCard key={line.id} railLine={line} onDeleted={fetchAll} onUpdated={fetchAll}/>
+              <RailLineCard
+                key={line.id}
+                railLine={line}
+                onDeleted={refetch}
+                onUpdated={refetch}
+              />
             ))
           ) : (
             <p className="text-slate-400">No rail lines found.</p>
