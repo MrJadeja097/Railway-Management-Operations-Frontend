@@ -9,14 +9,15 @@ export function useCreate<TPayload>(
   return useCallback(
     async (data: TPayload, reset?: () => void) => {
       try {
-        await createFn(data);
-        toast.success(`${entityName} created successfully.`);
+        const response = createFn(data);
+        toast.promise(response ,{
+          pending: `Creating ${entityName} ...`,
+          success: `${entityName} created successfully.`,
+          error: `Failed to create ${entityName}.`
+        })
         if (reset) reset();
         onCreated();
-      } catch (error) {
-        console.error(`Error creating ${entityName}:`, error);
-        toast.error(`Failed to create ${entityName}.`);
-      }
+      } catch (error) {}
     },
     [createFn, entityName, onCreated]
   );
