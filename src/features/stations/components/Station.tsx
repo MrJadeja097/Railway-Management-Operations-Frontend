@@ -3,46 +3,57 @@ import StationCard from "./StationCard";
 import { useAuth } from "../../auth/AuthProvider";
 import { CreateStationForm } from "./CreateStationForm";
 import { getAllStation } from "../../../api";
-import type { Station } from "../models";
-import { useFetchAll } from "../../../Hooks";
+import { useQuery } from "@tanstack/react-query";
 
 export const StationComponent: React.FC = () => {
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["station"],
+    queryFn: getAllStation,
+    staleTime: 15 * 60 * 1000,
+  });
   const { token } = useAuth();
-
-  const { data, loading, fetchAll } = useFetchAll<Station>(getAllStation);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<
     "NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC"
   >("NAME_ASC");
   const [showAddForm, setShowAddForm] = useState(false);
 
-  const filteredStations = data
-    .filter((st) => {
-      const q = search.toLowerCase();
-      return st.name.toLowerCase().includes(q) || st.railLine.name.toLowerCase().includes(q);
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case "NAME_ASC":
-          return a.name.localeCompare(b.name);
-        case "NAME_DESC":
-          return b.name.localeCompare(a.name);
-        case "ID_ASC":
-          return a.id - b.id;
-        case "ID_DESC":
-          return b.id - a.id;
-        default:
-          return 0;
-      }
-    });
+  const filteredStations = React.useMemo(() => {
+    if (!isLoading && data) {
+      return data
+        .filter((st) => {
+          const q = search.toLowerCase();
+          return (
+            st.name.toLowerCase().includes(q) ||
+            st.railLine.name.toLowerCase().includes(q)
+          );
+        })
+        .sort((a, b) => {
+          switch (sortBy) {
+            case "NAME_ASC":
+              return a.name.localeCompare(b.name);
+            case "NAME_DESC":
+              return b.name.localeCompare(a.name);
+            case "ID_ASC":
+              return a.id - b.id;
+            case "ID_DESC":
+              return b.id - a.id;
+            default:
+              return 0;
+            }
+          });
+        } else {
+          return [];
+        }
+      }, [data, isLoading, search, sortBy]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white">
-        Loading Station Data...
-      </div>
-    );
-  }
+      if (isLoading) {
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white">
+            Loading Station Data...
+          </div>
+        );
+      }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
@@ -87,14 +98,19 @@ export const StationComponent: React.FC = () => {
 
         {showAddForm && (
           <div className="mb-8 flex justify-center">
-            <CreateStationForm onCreated={fetchAll} />
+            <CreateStationForm onCreated={refetch} />
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredStations.length > 0 ? (
             filteredStations.map((st) => (
-              <StationCard key={st.id} station={st} onDeleted={fetchAll} onUpdated={fetchAll} />
+              <StationCard
+                key={st.id}
+                station={st}
+                onDeleted={refetch}
+                onUpdated={refetch}
+              />
             ))
           ) : (
             <p className="text-slate-400">No stations found.</p>
