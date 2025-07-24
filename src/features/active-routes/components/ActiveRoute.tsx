@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { ActiveRouteCard } from "./ActiveRouteCard";
-import { useFetchAll } from "../../../Hooks";
-import type { ActiveRoute } from "../models";
 import { getAllActiveRoutes } from "../../../api";
 import { useAuth } from "../../auth/AuthProvider";
 import { CreateActiveRouteForm } from "./CreateActiveRouteForm";
+import { useQuery } from "@tanstack/react-query";
 
 export const ActiveRoutes: React.FC = () => {
+const {data, isLoading, refetch} = useQuery({
+  queryKey: ['active-routes'],
+  queryFn: getAllActiveRoutes,
+  staleTime: 15 * 60 * 1000,
+})
   const { token } = useAuth();
-
-  const { data, loading, fetchAll } =
-    useFetchAll<ActiveRoute>(getAllActiveRoutes);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<
     "NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC"
@@ -18,11 +19,13 @@ export const ActiveRoutes: React.FC = () => {
 
   const [showAddForm, setShowAddForm] = useState(false);
 
-  const filteredRoutes = data
-    .filter((route) => {
-      const q = search.toLowerCase();
-      return (
-        route.name.toLowerCase().includes(q) ||
+  const filteredRoutes = React.useMemo(()=> {
+    if (!isLoading && data) {
+      
+      return data.filter((route) => {
+        const q = search.toLowerCase();
+        return (
+          route.name.toLowerCase().includes(q) ||
         route.driver?.firstName?.toLowerCase().includes(q) ||
         route.driver?.lastName?.toLowerCase().includes(q) ||
         route.back_guard?.firstName?.toLowerCase().includes(q) ||
@@ -38,16 +41,20 @@ export const ActiveRoutes: React.FC = () => {
           return a.name.localeCompare(b.name);
         case "NAME_DESC":
           return b.name.localeCompare(a.name);
-        case "ID_ASC":
-          return a.id - b.id;
-        case "ID_DESC":
-          return b.id - a.id;
-        default:
-          return 0;
-      }
-    });
+          case "ID_ASC":
+            return a.id - b.id;
+            case "ID_DESC":
+              return b.id - a.id;
+              default:
+                return 0;
+              }
+            });
+          } else {
+            return [];
+          }
+          }, [data, isLoading, sortBy, search])
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="p-6 grid gap-6 bg-[#0a0f0f] min-h-screen text-[#d0dad8]">
         Loading active routes...
@@ -98,7 +105,7 @@ export const ActiveRoutes: React.FC = () => {
 
         {showAddForm && (
           <div className="mb-8 flex justify-center">
-            <CreateActiveRouteForm onCreated={fetchAll} />
+            <CreateActiveRouteForm onCreated={refetch} />
           </div>
         )}
 
