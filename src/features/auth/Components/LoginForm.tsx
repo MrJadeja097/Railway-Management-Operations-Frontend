@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthProvider";
 import { LogInApi } from "../../../api";
 import { toast } from "react-toastify";
+import type { AuthResponse } from "../models/AuthResponse";
 
 export const LoginForm: React.FC = () => {
   const { login } = useAuth();
@@ -14,9 +15,12 @@ export const LoginForm: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await LogInApi({email, password});
-      toast.success("Logged In.");
-      login(res);
+      const res =  LogInApi({email, password});
+      toast.promise<AuthResponse>(res , {
+        pending: 'Logging in...',
+        success: 'Logged In.',
+      })
+      login(await res);
       navigate("/");
     } catch {}
   };
@@ -34,7 +38,7 @@ export const LoginForm: React.FC = () => {
             <label className="block mb-1 text-slate-300">Password</label>
             <input className="w-full p-3 rounded-lg bg-slate-900/50 border border-slate-700/50 text-slate-200" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
-          <button className="w-full py-3 bg-cyan-700 hover:bg-cyan-600 text-white rounded-lg transition">Login</button>
+          <button className="w-full cursor-pointer py-3 bg-cyan-700 hover:bg-cyan-600 text-white rounded-lg transition">Login</button>
         </form>
       </div>
     </div>

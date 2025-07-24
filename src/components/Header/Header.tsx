@@ -120,7 +120,7 @@ export const Header = () => {
             {token ? (
               <button
                 onClick={handleLogout}
-                className="px-4 py-2.5 rounded-lg font-medium text-sm text-white bg-gradient-to-r from-red-600/95 to-red-700/95 hover:from-red-700 hover:to-red-800 border border-red-600/40 hover:border-red-500/60 transition-all duration-300 shadow-md hover:shadow-red-500/30"
+                className="px-4 py-2.5 cursor-pointer rounded-lg font-medium text-sm text-white bg-gradient-to-r from-red-600/95 to-red-700/95 hover:from-red-700 hover:to-red-800 border border-red-600/40 hover:border-red-500/60 transition-all duration-300 shadow-md hover:shadow-red-500/30"
               >
                 Log out
               </button>
