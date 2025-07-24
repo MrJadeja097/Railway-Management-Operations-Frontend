@@ -15,6 +15,7 @@ export function useCreate<TPayload>(
           success: `${entityName} created successfully.`,
           error: `Failed to create ${entityName}.`
         })
+        await response;
         if (reset) reset();
         onCreated();
       } catch (error) {}

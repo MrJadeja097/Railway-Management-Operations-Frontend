@@ -15,6 +15,7 @@ export function useUpdate<TPayload, TPayloadResponse = TPayload>(
           success: `${entityName} updated successfully.`,
           error: `Failed to update ${entityName}.`
         })
+        await response;
         onUpdated();
       } catch (error) {}
     },
