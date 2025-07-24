@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: my-app
+    name: my-vite-app
     env: static
-    staticPublishPath: build
+    staticPublishPath: dist
     routes:
       - type: rewrite
-        source: /.* 
+        source: /.*
         destination: /index.html
