@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { TrainCard } from "./TrainCard";
-import { TrainStatuses, type Train, type TrainStatus } from "../models";
+import { TrainStatuses, type TrainStatus } from "../models";
 import { CreateTrainForm } from "./CreateTrianForm";
 import { useAuth } from "../../auth/AuthProvider";
 import { getAllTrain } from "../../../api";
-import { useFetchAll } from "../../../Hooks";
+import { useQuery } from "@tanstack/react-query";
 
 export const TrainComponent: React.FC = () => {
-  const { token } = useAuth();
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["train"],
+    queryFn: getAllTrain,
+    staleTime: 15 * 60 *1000 ,
+  });
 
-    const { data, loading, fetchAll } = useFetchAll<Train>(getAllTrain);
+  const { token } = useAuth();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<TrainStatus | "ALL">("ALL");
   const [sortBy, setSortBy] = useState<
@@ -17,39 +21,44 @@ export const TrainComponent: React.FC = () => {
   >("NAME_ASC");
   const [showAddForm, setShowAddForm] = useState(false);
 
-  const filteredTrains = data
-    .filter((train) => {
-      const query = search.toLowerCase();
+  const filteredTrains = React.useMemo(() => {
+    if (!isLoading && data) {
+      return data.filter((train) => {
+          const query = search.toLowerCase();
 
-      const matchesText =
-        train.name.toLowerCase().includes(query) ||
-        train.description.toLowerCase().includes(query) ||
-        train.status.toLowerCase().includes(query) ||
-        train.id.toString().includes(query) ||
-        train.total_coaches.toString().includes(query) ||
-        train.top_speed.toString().includes(query);
+          const matchesText =
+            train.name.toLowerCase().includes(query) ||
+            train.description.toLowerCase().includes(query) ||
+            train.status.toLowerCase().includes(query) ||
+            train.id.toString().includes(query) ||
+            train.total_coaches.toString().includes(query) ||
+            train.top_speed.toString().includes(query);
 
-      const matchesStatus =
-        statusFilter === "ALL" || train.status === statusFilter;
+          const matchesStatus =
+            statusFilter === "ALL" || train.status === statusFilter;
 
-      return matchesText && matchesStatus;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case "NAME_ASC":
-          return a.name.localeCompare(b.name);
-        case "NAME_DESC":
-          return b.name.localeCompare(a.name);
-        case "ID_ASC":
-          return a.id - b.id;
-        case "ID_DESC":
-          return b.id - a.id;
-        default:
-          return 0;
-      }
-    });
+          return matchesText && matchesStatus;
+        })
+        .sort((a, b) => {
+          switch (sortBy) {
+            case "NAME_ASC":
+              return a.name.localeCompare(b.name);
+            case "NAME_DESC":
+              return b.name.localeCompare(a.name);
+            case "ID_ASC":
+              return a.id - b.id;
+            case "ID_DESC":
+              return b.id - a.id;
+            default:
+              return 0;
+          }
+        });
+    } else {
+      return [];
+    }
+  }, [data, isLoading, search, sortBy, statusFilter]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white">
         Loading Train Data...
@@ -119,14 +128,19 @@ export const TrainComponent: React.FC = () => {
 
         {showAddForm && (
           <div className="mb-8 flex justify-center">
-            <CreateTrainForm onCreated={fetchAll} />
+            <CreateTrainForm onCreated={refetch} />
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredTrains.length > 0 ? (
             filteredTrains.map((train) => (
-              <TrainCard key={train.id} train={train} onDeleted={fetchAll} onUpdated={fetchAll}/>
+              <TrainCard
+                key={train.id}
+                train={train}
+                onDeleted={refetch}
+                onUpdated={refetch}
+              />
             ))
           ) : (
             <p className="text-slate-400">No trains found.</p>

@@ -1,20 +1,27 @@
 import React, { useState } from "react";
 import { StaffCard } from "./StaffCard";
 import { AddStaffForm } from "./AddStaffForm";
-import type { Staff } from "../models";
-import { useFetchAll } from "../../../Hooks";
-import { getAllStaff} from "../../../api";
+import { getAllStaff } from "../../../api";
+import { useQuery } from "@tanstack/react-query";
 
 export const StaffComponent: React.FC = () => {
-  const { data, loading, fetchAll } = useFetchAll<Staff>(getAllStaff);
-
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["staff"],
+    queryFn: getAllStaff,
+    staleTime: 15 * 60 *1000 ,
+  });
 
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC">("NAME_ASC");
-  const [showAddForm, setShowAddForm] = useState(false); 
+  const [sortBy, setSortBy] = useState<
+    "NAME_ASC" | "NAME_DESC" | "ID_ASC" | "ID_DESC"
+  >("NAME_ASC");
+  const [showAddForm, setShowAddForm] = useState(false);
 
-  const filteredStaff = data
-    .filter((person) => {
+  
+  
+  const filteredStaff = React.useMemo(() => {
+  if (!isLoading && data) {
+    return data.filter(person => {
       const q = search.toLowerCase();
       return (
         person.firstName.toLowerCase().includes(q) ||
@@ -37,8 +44,13 @@ export const StaffComponent: React.FC = () => {
           return 0;
       }
     });
+  } else {
+    return [];
+  }
+}, [search, sortBy, data, isLoading]);
 
-  if (loading) {
+
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white">
         Loading Staff Data...
@@ -49,7 +61,6 @@ export const StaffComponent: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
       <div className="max-w-7xl mx-auto">
-
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
             <h1 className="text-3xl font-light text-cyan-100 mb-2 drop-shadow-lg">
@@ -87,16 +98,16 @@ export const StaffComponent: React.FC = () => {
           </div>
         </div>
 
-        {showAddForm && ( 
+        {showAddForm && (
           <div className="mb-8 flex justify-center">
-            <AddStaffForm onCreated={fetchAll}/>
+            <AddStaffForm onCreated={refetch} />
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredStaff.length > 0 ? (
             filteredStaff.map((person) => (
-              <StaffCard key={person.id} person={person} onDeleted={fetchAll}/>
+              <StaffCard key={person.id} person={person} onDeleted={refetch} />
             ))
           ) : (
             <p className="text-slate-400">No staff found.</p>
