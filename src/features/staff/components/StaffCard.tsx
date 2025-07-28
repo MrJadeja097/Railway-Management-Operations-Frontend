@@ -5,15 +5,11 @@ import { DeleteButton } from "../../../components/Buttons/Delete";
 
 interface Props {
   person: Staff;
-  onDeleted: () => void; 
+  onDeleted: () => void;
 }
 
-
 export const StaffCard: React.FC<Props> = ({ person, onDeleted }) => {
-
-
   const confirmDelete = useConfirmDelete(deleteStaff, "Staff", onDeleted);
-
 
   return (
     <div
@@ -21,13 +17,10 @@ export const StaffCard: React.FC<Props> = ({ person, onDeleted }) => {
       className="group bg-slate-800/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-300 overflow-hidden border border-slate-700/50 hover:border-cyan-500/30"
     >
       <div className="absolute top-4 right-4 w-16 h-14 flex items-center justify-center bg-gradient-to-br from-slate-800/60 to-slate-600/80 backdrop-blur-sm rounded-xl border border-slate-600/50 text-slate-200 text-base font-semibold group-hover:from-slate-700/50  group-hover:border-cyan-500/30 transition-all duration-300">
-          <span className="ml-1 text-lg">ID: {person.id}</span>
+        <span className="ml-1 text-lg">ID: {person.id}</span>
       </div>
       <div className="p-6">
         <div className="flex items-center mb-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-slate-700/80 to-slate-600/80 backdrop-blur-sm rounded-xl flex items-center justify-center mr-4 group-hover:from-cyan-500/20 group-hover:to-blue-500/20 transition-all duration-300 border border-slate-600/50 group-hover:border-cyan-400/30">
-            <span className="text-xl">👤</span>
-          </div>
           <div>
             <h2 className="text-xl font-medium text-slate-100 leading-tight">
               {person.firstName} {person.lastName}
@@ -86,7 +79,7 @@ export const StaffCard: React.FC<Props> = ({ person, onDeleted }) => {
               day: "numeric",
             })}
           </span>
-              <DeleteButton onClick={() => confirmDelete(person.id)} />
+          <DeleteButton onClick={() => confirmDelete(person.id)} />
         </div>
       </div>
     </div>

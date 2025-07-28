@@ -6,8 +6,9 @@ import { StaffRoutes } from "../features/staff";
 import { StationRoutes } from "../features/stations";
 import { TrainRoutes } from "../features/trains";
 import { HomeRoute } from "../features/home";
-import { LoginForm } from "../features/auth/LoginForm";
+import { LoginForm } from "../features/auth/Components/LoginForm";
 import { RequireAuth } from "../features/auth/RequireAuth";
+import { RolesRoutes } from "../features/roles";
 
 
 const routes: RouteObject[] = [
@@ -45,6 +46,10 @@ const routes: RouteObject[] = [
           {
             path: "staff/*",
             element: <StaffRoutes />,
+          },
+           {
+            path: "roles/*",
+            element: <RolesRoutes />,
           },
         ],
       },

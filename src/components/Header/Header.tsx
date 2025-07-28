@@ -106,6 +106,18 @@ export const Header = () => {
                 >
                   Staff
                 </NavLink>
+               <NavLink
+                  to="/roles"
+                  className={({ isActive }) =>
+                    `px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 ${
+                      isActive
+                        ? "bg-gray-700/70 text-gray-100 shadow-md shadow-gray-500/20 border border-gray-600/30"
+                        : "text-gray-300 hover:text-gray-100 hover:bg-gray-700/40 hover:shadow-gray-500/10"
+                    }`
+                  }
+                >
+                  Roles
+                </NavLink>
               </>
             )}
           </div>
@@ -120,7 +132,7 @@ export const Header = () => {
             {token ? (
               <button
                 onClick={handleLogout}
-                className="px-4 py-2.5 rounded-lg font-medium text-sm text-white bg-gradient-to-r from-red-600/95 to-red-700/95 hover:from-red-700 hover:to-red-800 border border-red-600/40 hover:border-red-500/60 transition-all duration-300 shadow-md hover:shadow-red-500/30"
+                className="px-4 py-2.5 cursor-pointer rounded-lg font-medium text-sm text-white bg-gradient-to-r from-red-600/95 to-red-700/95 hover:from-red-700 hover:to-red-800 border border-red-600/40 hover:border-red-500/60 transition-all duration-300 shadow-md hover:shadow-red-500/30"
               >
                 Log out
               </button>

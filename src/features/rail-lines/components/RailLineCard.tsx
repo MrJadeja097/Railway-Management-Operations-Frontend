@@ -45,9 +45,6 @@ export const RailLineCard: React.FC<Props> = ({
           </div>
           <div className="p-6">
             <div className="flex items-center mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-slate-700/80 to-slate-600/80 backdrop-blur-sm rounded-xl flex items-center justify-center mr-4 group-hover:from-yellow-400/20 group-hover:to-yellow-500/20 transition-all duration-300 border border-slate-600/50 group-hover:border-yellow-300/30">
-                🛤️
-              </div>
               <div>
                 <h2 className="text-xl font-medium text-slate-100 leading-tight">
                   {railLine.name}
@@ -56,10 +53,10 @@ export const RailLineCard: React.FC<Props> = ({
             </div>
             <div className="pt-4 border-t border-slate-700/50">
               <p className="text-sm text-slate-400 mb-1">📝 Description</p>
-              <div className="text-slate-200 text-sm mb-6"> {/* Increased margin-bottom */}
+              <div className="text-slate-200 text-sm mb-6">
                 {railLine.description}
               </div>
-              <div className="mb-4"> {/* Added margin-bottom */}
+              <div className="mb-4">
                 <p className="text-sm text-slate-400 mb-1">🚉 Start Station</p>
                 <div className="text-slate-200 text-sm">
                   {railLine.startStation.name}

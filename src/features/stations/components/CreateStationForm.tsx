@@ -72,11 +72,11 @@ export const CreateStationForm: React.FC<Props> = ({ onCreated }) => {
           </label>
           <input
             type="number"
-            {...register("railLine", { valueAsNumber: true })}
+            {...register("rail_line_id", { valueAsNumber: true })}
             className="w-full px-3 py-2 rounded bg-slate-700 text-slate-100"
           />
-          {errors.railLine && (
-            <p className="text-red-400 text-xs">{errors.railLine.message}</p>
+          {errors.rail_line_id && (
+            <p className="text-red-400 text-xs">{errors.rail_line_id.message}</p>
           )}
         </div>
       </div>

@@ -9,13 +9,15 @@ export function useUpdate<TPayload, TPayloadResponse = TPayload>(
   return useCallback(
     async (id: number, data: TPayload) => {
       try {
-        await updateFn(id, data);
-        toast.success(`${entityName} updated successfully.`);
+        const response = updateFn(id, data);
+        toast.promise(response ,{
+          pending: `Updating ${entityName} ...`,
+          success: `${entityName} updated successfully.`,
+          error: `Failed to update ${entityName}.`
+        })
+        await response;
         onUpdated();
-      } catch (error) {
-        console.error(`Error updating ${entityName}:`, error);
-        toast.error(`Failed to update ${entityName}.`);
-      }
+      } catch (error) {}
     },
     [updateFn, entityName, onUpdated]
   );
