@@ -13,9 +13,6 @@ export const ActiveRouteCard : React.FC<Props> = ({route}) => {
           >
             <div className="p-6">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#1a2c2c]/80 to-[#1a2c2c]/60 backdrop-blur-sm rounded-xl flex items-center justify-center mr-4 group-hover:from-[#5dc1b9]/20 group-hover:to-[#3da9a1]/20 transition-all duration-300 border border-[#1a2c2c]/50 group-hover:border-[#5dc1b9]/30">
-                  <span className="text-xl">🚆</span>
-                </div>
                 <div>
                   <h2 className="text-xl font-medium text-[#d0dad8] leading-tight">
                     {route.name}
@@ -32,7 +29,7 @@ export const ActiveRouteCard : React.FC<Props> = ({route}) => {
                   <h3 className="text-sm font-medium text-[#5dc1b9] mb-1">
                     Start Station 🚉
                   </h3>
-                  <p className="text-[#d0dad8]">{route.startStation.name}</p>
+                  <p className="text-[#d0dad8]k">{route.startStation.name}</p>
                   <p className="text-xs text-[#7a918f]">
                     ({route.startStation.latitude}, {route.startStation.longitude})
                   </p>

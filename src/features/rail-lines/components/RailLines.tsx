@@ -62,7 +62,7 @@ export const RailLineComponent: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
             <h1 className="text-3xl font-light text-yellow-100 mb-2 drop-shadow-lg">
-              Rail Lines
+              Rail Lines Directory
             </h1>
             <div className="w-20 h-0.5 bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg shadow-yellow-400/30"></div>
           </div>

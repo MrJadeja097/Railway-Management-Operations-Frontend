@@ -106,6 +106,18 @@ export const Header = () => {
                 >
                   Staff
                 </NavLink>
+               <NavLink
+                  to="/roles"
+                  className={({ isActive }) =>
+                    `px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 ${
+                      isActive
+                        ? "bg-gray-700/70 text-gray-100 shadow-md shadow-gray-500/20 border border-gray-600/30"
+                        : "text-gray-300 hover:text-gray-100 hover:bg-gray-700/40 hover:shadow-gray-500/10"
+                    }`
+                  }
+                >
+                  Roles
+                </NavLink>
               </>
             )}
           </div>

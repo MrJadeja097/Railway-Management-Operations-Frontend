@@ -5,7 +5,7 @@ import { useAuth } from "../../auth/AuthProvider";
 import { CreateActiveRouteForm } from "./CreateActiveRouteForm";
 import { useQuery } from "@tanstack/react-query";
 
-export const ActiveRoutes: React.FC = () => {
+export const ActiveRoutesComponent: React.FC = () => {
 const {data, isLoading, refetch} = useQuery({
   queryKey: ['active-routes'],
   queryFn: getAllActiveRoutes,

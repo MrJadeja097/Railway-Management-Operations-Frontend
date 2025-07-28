@@ -21,9 +21,6 @@ export const StaffCard: React.FC<Props> = ({ person, onDeleted }) => {
       </div>
       <div className="p-6">
         <div className="flex items-center mb-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-slate-700/80 to-slate-600/80 backdrop-blur-sm rounded-xl flex items-center justify-center mr-4 group-hover:from-cyan-500/20 group-hover:to-blue-500/20 transition-all duration-300 border border-slate-600/50 group-hover:border-cyan-400/30">
-            <span className="text-xl">👤</span>
-          </div>
           <div>
             <h2 className="text-xl font-medium text-slate-100 leading-tight">
               {person.firstName} {person.lastName}
