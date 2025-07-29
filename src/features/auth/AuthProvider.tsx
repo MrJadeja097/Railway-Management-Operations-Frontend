@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
 import type { AuthResponse } from "./models/AuthResponse";
 import { toast } from "react-toastify";
+import { queryClient } from "../../main";
 
 interface AuthContextProps {
   userName: string | null;
@@ -31,6 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     setUserName(null)
     setRole(null)
+    queryClient.clear();
     localStorage.removeItem("access-token");
     localStorage.removeItem("user-name");
     localStorage.removeItem("user-role");
