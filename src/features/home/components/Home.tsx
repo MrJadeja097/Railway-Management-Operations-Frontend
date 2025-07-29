@@ -91,6 +91,23 @@ export const HomeComponent: React.FC = () => {
               </span>
             </Link>
           )}
+
+          {token && (
+            <Link
+              to="/roles"
+              className="group bg-slate-800/60 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-rose-500/20 border border-slate-700/50 hover:border-rose-500/30 transition-all"
+            >
+              <h2 className="text-2xl font-semibold mb-2 text-rose-200 group-hover:text-rose-400 transition">
+                 Roles
+              </h2>
+              <p className="text-slate-400 mb-4">
+                Manage all Roles and Permissions.
+              </p>
+              <span className="inline-block px-4 py-2 rounded-lg bg-rose-700/30 text-rose-200 group-hover:bg-rose-600/40 transition">
+                View Roles
+              </span>
+            </Link>
+          )}
         </div>
       </div>
     </div>

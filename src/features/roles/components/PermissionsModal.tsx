@@ -48,12 +48,16 @@ export const PermissionModal: React.FC<Props> = ({
             <div className="text-red-600">Failed to load permissions</div>
           ) : (
             <ul className="space-y-3">
-              {permissions?.map((p: any) => (
-                <li key={p.id}>
-                  <div className="inline-block">• {p.permissions.name}</div>
-                  {/* <div className="text-sm text-gray-600">{p.permissions.description}</div> */}
-                </li>
-              ))}
+              {permissions.length > 0 ? (
+                permissions.map((p: any) => (
+                  <li key={p.id}>
+                    <div className="inline-block">• {p.permissions.name}</div>
+                    {/* <div className="text-sm text-gray-600">{p.permissions.description}</div> */}
+                  </li>
+                ))
+              ) : (
+                <p className="text-slate-500">No Permissoins allocated yet.</p>
+              )}
             </ul>
           )}
         </div>

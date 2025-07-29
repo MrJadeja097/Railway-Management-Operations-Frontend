@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import type { Roles } from "../../../api";
+import type { Role } from "../models";
 import { PermissionModal } from "./PermissionsModal";
 
 interface RoleCardProps {
-  role: Roles;
+  role: Role;
   onViewPermissions?: () => void;
   onAddPermission?: () => void;
   onRemovePermission?: () => void;
