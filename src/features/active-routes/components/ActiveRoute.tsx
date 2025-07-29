@@ -63,7 +63,7 @@ const {data, isLoading, refetch} = useQuery({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0f0f] to-[#0a0f0f] p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
