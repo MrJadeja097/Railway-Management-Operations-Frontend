@@ -4,7 +4,7 @@ export const TrainStatuses = [
   "GROUNDED",
   "UNDER_MAINTENANCE",
   "ON_ACTIVEROUTE",
-] as const;
+];
 
 export type TrainStatus = typeof TrainStatuses[number];
 

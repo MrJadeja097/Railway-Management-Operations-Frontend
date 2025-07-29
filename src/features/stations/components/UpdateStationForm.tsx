@@ -20,7 +20,7 @@ export const UpdateStationForm: React.FC<Props> = ({station,onSubmit,onCancel}) 
       name: station.name,
       latitude: +station.latitude,
       longitude: +station.longitude,
-      railLine: station.railLine.id,
+      rail_line_id: station.railLine.id,
     },
   });
 
@@ -73,11 +73,11 @@ export const UpdateStationForm: React.FC<Props> = ({station,onSubmit,onCancel}) 
           </label>
           <input
             type="number"
-            {...register("railLine", { valueAsNumber: true })}
+            {...register("rail_line_id", { valueAsNumber: true })}
             className="w-full px-3 py-2 rounded bg-slate-700 text-slate-100"
           />
-          {errors.railLine && (
-            <p className="text-red-400 text-xs">{errors.railLine.message}</p>
+          {errors.rail_line_id && (
+            <p className="text-red-400 text-xs">{errors.rail_line_id.message}</p>
           )}
         </div>
       </div>
