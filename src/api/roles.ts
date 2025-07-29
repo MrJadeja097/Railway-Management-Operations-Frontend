@@ -16,3 +16,8 @@ export const createRole = async (payload: RoleFormData): Promise<Role> => {
     const response = await apiHandler.post<Role>("/roles/create_role", payload);
     return response.data;
 }
+
+export const deleteRole = async (id: number) => {
+  const { data } = await apiHandler.delete(`/roles/${id}`);
+  return data;
+};

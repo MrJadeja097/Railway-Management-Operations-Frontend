@@ -1,37 +1,47 @@
 import React, { useState } from "react";
 import type { Role } from "../models";
 import { PermissionModal } from "./PermissionsModal";
+import { DeleteButton } from "../../../components";
+import { useAuth } from "../../auth/AuthProvider";
+import { deleteRole } from "../../../api";
+import { useConfirmDelete } from "../../../Hooks";
 
 interface RoleCardProps {
-  role: Role;
+  roles: Role;
+  onDeleted: () => void;
   onViewPermissions?: () => void;
   onAddPermission?: () => void;
   onRemovePermission?: () => void;
 }
 
 export const RoleCard: React.FC<RoleCardProps> = ({
-  role,
+  roles,
   onAddPermission,
   onRemovePermission,
+  onDeleted,
 }) => {
+  const { token, role } = useAuth();
   const [showModal, setShowModal] = useState(false);
+
+  const confirmDelete = useConfirmDelete(deleteRole, "Role", onDeleted);
+
   return (
     <div className="relative group bg-gradient-to-br from-slate-800/60 to-slate-900/70 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-rose-500/10 transition-all duration-300 overflow-hidden border border-slate-700/50 hover:border-rose-600/40 p-5 pb-3">
       <div className="absolute top-5 right-0 w-16  text-gray-400 text-base font-semibold ">
-        <span className="ml-1 text-lg">ID: {role.id}</span>
+        <span className="ml-1 text-lg">ID: {roles.id}</span>
       </div>
 
       <div className="flex items-center mb-4">
         <div>
           <h2 className="text-xl font-semibold text-slate-100 leading-tight tracking-wide drop-shadow-md">
-            {role.name}
+            {roles.name}
           </h2>
         </div>
       </div>
       <hr className="my-3 border-slate-600/40 group-hover:border-rose-600/40 transition-colors duration-300" />
 
       <p className="text-gray-300 mb-4 text-sm leading-relaxed">
-        {role.description}
+        {roles.description}
       </p>
 
       <div className="mt-6 flex flex-wrap mb-4 gap-4 items-center justify-start">
@@ -65,7 +75,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({
       <div className="pt-2 border-t border-slate-700/50 flex justify-between items-center text-xs text-slate-500">
         <span>
           Created on{" "}
-          {new Date(role.createdAt).toLocaleDateString("en-US", {
+          {new Date(roles.createdAt).toLocaleDateString("en-US", {
             year: "numeric",
             month: "short",
             day: "numeric",
@@ -74,6 +84,12 @@ export const RoleCard: React.FC<RoleCardProps> = ({
             second: "numeric",
           })}
         </span>
+
+        {token && role == "Super Admin" && (
+          <div className="flex items-center">
+            <DeleteButton onClick={() => confirmDelete(roles.id)} />
+          </div>
+        )}
       </div>
     </div>
   );

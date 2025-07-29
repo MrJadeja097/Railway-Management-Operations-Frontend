@@ -5,7 +5,7 @@ export const TrainSchema = z.object({
   description: z.string().min(1, "Description is required"),
   total_coaches: z.number().min(1, "At least 1 coach"),
   top_speed: z.number().min(1, "Top speed must be positive"),
-  status: z.enum(["ACTIVE", "GROUNDED", "UNDER_MAINTENANCE", "ON_ACTIVEROUTE"]),
+  status: z.string().min(1, "Select train status.")
 });
 
 export type TrainFormData = z.infer<typeof TrainSchema>;
