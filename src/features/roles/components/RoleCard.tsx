@@ -6,24 +6,21 @@ import { useAuth } from "../../auth/AuthProvider";
 import { deleteRole } from "../../../api";
 import { useConfirmDelete } from "../../../Hooks";
 import { AddPermissionForm } from './AddPermissionForm';
+import { RemovePermissionForm } from "./RemovePermissionForm";
 
 interface RoleCardProps {
   roles: Role;
   onDeleted: () => void;
-  onViewPermissions?: () => void;
-  onAddPermission: () => void;
-  onRemovePermission?: () => void;
 }
 
 export const RoleCard: React.FC<RoleCardProps> = ({
   roles,
-  onAddPermission,
-  onRemovePermission,
   onDeleted,
 }) => {
   const { token, role } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
 
   const confirmDelete = useConfirmDelete(deleteRole, "Role", onDeleted);
 
@@ -67,17 +64,22 @@ export const RoleCard: React.FC<RoleCardProps> = ({
         </button>
 
         <button
-          onClick={onRemovePermission}
+          onClick={() => setShowRemoveModal(true)}
           className="px-4 py-2 rounded-lg text-white text-sm font-semibold transition-all duration-300 hover:text-white hover:shadow-[0_0_10px_#f43f5e] border border-rose-500/30"
         >
           ❌ Revoke Access
         </button>
       </div>
 
-      {/* Add Permission Modal */}
       {showAddModal && (
         <div className="mb-8 flex justify-center">
-          <AddPermissionForm onAddPermission={onAddPermission} roleId={roles.id} setShowAddModal={setShowAddModal}/>
+          <AddPermissionForm roleId={roles.id} setShowAddModal={setShowAddModal}/>
+        </div>
+      )}
+
+      {showRemoveModal && (
+        <div className="mb-8 flex justify-center">
+          <RemovePermissionForm roleId={roles.id} setShowRemoveModal={setShowRemoveModal}/>
         </div>
       )}
 
