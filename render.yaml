@@ -2,6 +2,7 @@ services:
   - type: web
     name: my-vite-app
     env: static
+    buildCommand: yarn build
     staticPublishPath: dist
     routes:
       - type: rewrite
