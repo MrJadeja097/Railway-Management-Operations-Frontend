@@ -22,8 +22,6 @@ export const PermissionModal: React.FC<Props> = ({
 
   if (!open) return null;
 
-  if (!isLoading) console.log("---------", permissions);
-
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4 py-8">
       <div className="bg-white w-full max-w-lg max-h-full rounded-lg shadow-lg relative flex flex-col border border-gray-200">
