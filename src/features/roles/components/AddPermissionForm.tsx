@@ -2,7 +2,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { PermissionSchema, type PermissionFormData } from "../models";
 import { useCreate } from "../../../Hooks";
-import { addPermission } from "../../../api";
+import { addPermission, getAllPermissionsForRole } from "../../../api";
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "../../../main";
+import { id } from "zod/v4/locales";
 
 interface Props {
   roleId: number;
@@ -19,17 +22,25 @@ export const AddPermissionForm: React.FC<Props> = ({roleId,onAddPermission, setS
   } = useForm({
     resolver: zodResolver(PermissionSchema),
     defaultValues:{
-        roleId:roleId
+      roleId:roleId
     }
   });
 
-    const create = useCreate(addPermission, "Permission", onAddPermission);
-  
+  const create = useCreate(addPermission, "Permission", onAddPermission);
+
+  const mutation = useMutation({
+      mutationFn:async (data: PermissionFormData) => await create(data),
+    onSuccess: async () => {
+      reset()
+      await queryClient.invalidateQueries({ queryKey: ["permissions", roleId] });
+    }
+  })
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
       <form className="bg-slate-900 border border-slate-600 rounded-2xl p-6 w-[90%] max-w-md shadow-lg backdrop-blur-md" 
         onSubmit={handleSubmit(async (data: PermissionFormData) => {
-                await create(data, reset);
+                mutation.mutate(data);
               })} >
         <h3 className="text-lg font-semibold text-white mb-4">
           Add New Permission
@@ -44,7 +55,7 @@ export const AddPermissionForm: React.FC<Props> = ({roleId,onAddPermission, setS
           )}
         </div>
 
-        <div className="flex justify-end gap-3">
+        <div className="flex mt-3 justify-end gap-3">
           <button
             type="button"
             onClick={() => {
