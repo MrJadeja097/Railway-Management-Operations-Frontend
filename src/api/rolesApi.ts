@@ -24,3 +24,7 @@ export const deleteRole = async (id: number) => {
 export const addPermission = async (payload: PermissionFormData) => {
   await apiHandler.post(`/roles/add_permission`, payload);
 }
+
+export const removePermission = async (payload: PermissionFormData) => {
+  await apiHandler.post(`/roles/remove_permission`, payload);
+}

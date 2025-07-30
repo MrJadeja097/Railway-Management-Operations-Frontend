@@ -100,7 +100,7 @@ export const RoleComponent: React.FC = () => {
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredRoles.length > 0 ? (
-            filteredRoles.map((role) => <RoleCard key={role.id} roles={role} onDeleted={refetch} onAddPermission={refetch}/>)
+            filteredRoles.map((role) => <RoleCard key={role.id} roles={role} onDeleted={refetch} />)
           ) : (
             <p className="text-slate-400">No roles found.</p>
           )}

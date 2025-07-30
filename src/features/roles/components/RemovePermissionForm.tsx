@@ -1,17 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { PermissionSchema, type PermissionFormData } from "../models";
-import { addPermission } from "../../../api";
+import { removePermission } from "../../../api";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "../../../main";
 import { toast } from "react-toastify";
 
 interface Props {
   roleId: number;
-  setShowAddModal: (setModel: boolean) => void;
+  setShowRemoveModal: (setModel: boolean) => void;
 }
 
-export const AddPermissionForm: React.FC<Props> = ({roleId, setShowAddModal}) => {
+export const RemovePermissionForm: React.FC<Props> = ({roleId, setShowRemoveModal}) => {
   const {
     register,
     handleSubmit,
@@ -24,18 +24,16 @@ export const AddPermissionForm: React.FC<Props> = ({roleId, setShowAddModal}) =>
     }
   });
 
-  // const create = useCreate(addPermission, "Permission", onAddPermission);
-  const add = async(data: PermissionFormData) => {
-    const response = addPermission(data)
+  const remove = async(data: PermissionFormData) => {
+    const response = removePermission(data)
     toast.promise(response ,{
               pending: `Adding ${data.permissionName} to this role...`,
               success: `${data.permissionName} is added to this role.`,
               error: `Failed to add ${data.permissionName} permission.`
             })
   }
-
   const mutation = useMutation({
-      mutationFn:async (data: PermissionFormData) => await add(data),
+      mutationFn:async (data: PermissionFormData) => await remove(data),
     onSuccess: async () => {
       reset()
       await queryClient.invalidateQueries({ queryKey: ["permissions", roleId] });
@@ -49,7 +47,7 @@ export const AddPermissionForm: React.FC<Props> = ({roleId, setShowAddModal}) =>
                 mutation.mutate(data);
               })} >
         <h3 className="text-lg font-semibold text-white mb-4">
-          Add New Permission
+          Remove Permission
         </h3>
         <div>
           <input
@@ -66,7 +64,7 @@ export const AddPermissionForm: React.FC<Props> = ({roleId, setShowAddModal}) =>
             type="button"
             onClick={() => {
               reset();
-              setShowAddModal(false);
+              setShowRemoveModal(false);
             }}
             className="px-4 py-1.5 text-sm rounded bg-gray-700 text-gray-200 hover:bg-gray-600 transition"
           >
