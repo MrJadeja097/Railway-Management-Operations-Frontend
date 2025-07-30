@@ -1,6 +1,5 @@
-import type { Role, RoleFormData } from "../features/roles";
+import type { PermissionFormData, Role, RoleFormData } from "../features/roles";
 import apiHandler from "./handler";
-
 
 export const getAllRoles = async () => {
   const response = await apiHandler.get<Role[]>("/roles/all");
@@ -21,3 +20,7 @@ export const deleteRole = async (id: number) => {
   const { data } = await apiHandler.delete(`/roles/${id}`);
   return data;
 };
+
+export const addPermission = async (payload: PermissionFormData) => {
+  await apiHandler.post(`/roles/add_permission`, payload);
+}

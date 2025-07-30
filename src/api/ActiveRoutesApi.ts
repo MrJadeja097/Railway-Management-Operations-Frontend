@@ -14,8 +14,6 @@ export const createActieveRoute = async (payload: ActiveRouteFormData): Promise<
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response)  {
-      console.log(error.response.data.message);
-      
         toast.error(error.response.data.message);
         throw new Error(error.response.data.message);
       } 
