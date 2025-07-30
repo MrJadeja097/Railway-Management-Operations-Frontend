@@ -1,4 +1,4 @@
-import type { Role, Staff } from "../features/staff/models";
+import type { AssignRoleFormData, Role, Staff } from "../features/staff/models";
 import apiHandler from "./handler";
 
 interface CreateStaffPayload {
@@ -34,3 +34,7 @@ export const deleteStaff = async (id: number) => {
   const { data } = await apiHandler.delete(`/staff/${id}`);
   return data;
 };
+
+export const assignRole = async (payload: AssignRoleFormData) => {
+  await apiHandler.post(`/staff/assign-role-to-staff`, payload);
+}
