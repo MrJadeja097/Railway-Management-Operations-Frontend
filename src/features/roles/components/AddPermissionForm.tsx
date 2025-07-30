@@ -46,7 +46,7 @@ export const AddPermissionForm: React.FC<Props> = ({roleId, setShowAddModal}) =>
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
       <form className="bg-slate-900 border border-slate-600 rounded-2xl p-6 w-[90%] max-w-md shadow-lg backdrop-blur-md" 
-        onSubmit={handleSubmit(async (data: PermissionFormData) => {
+        onSubmit={handleSubmit((data: PermissionFormData) => {
                 mutation.mutate(data);
               })} >
         <h3 className="text-lg font-semibold text-white mb-4">

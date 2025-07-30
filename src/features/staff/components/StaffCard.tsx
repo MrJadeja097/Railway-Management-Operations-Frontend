@@ -2,14 +2,18 @@ import type { Staff } from "../models";
 import { useConfirmDelete } from "../../../Hooks";
 import { deleteStaff } from "../../../api";
 import { DeleteButton } from "../../../components/Buttons/Delete";
+import { useState } from "react";
+import { AssignRoleForm } from "./AssignRoleForm";
 
 interface Props {
   person: Staff;
   onDeleted: () => void;
+  onRoleChanged: () => void;
 }
 
-export const StaffCard: React.FC<Props> = ({ person, onDeleted }) => {
+export const StaffCard: React.FC<Props> = ({ person, onDeleted, onRoleChanged}) => {
   const confirmDelete = useConfirmDelete(deleteStaff, "Staff", onDeleted);
+  const [showRoleForm, setShowRoleForm] = useState(false);
 
   return (
     <div
@@ -52,26 +56,36 @@ export const StaffCard: React.FC<Props> = ({ person, onDeleted }) => {
           </div>
         </div>
 
-        <div>
-          <div className="flex items-center mb-2">
-            {person.role ? (
-              <div>
-                <span className="inline-block px-3 py-1 bg-slate-700/60 backdrop-blur-sm text-cyan-300 rounded-full text-sm font-medium border border-slate-600/50">
-                  {person.role.name}
-                </span>
-              </div>
-            ) : (
-              <div className="pl-6">
-                <span className="inline-block px-3 py-1 bg-amber-900/40 backdrop-blur-sm text-amber-300 rounded-full text-sm font-medium border border-amber-600/30">
-                  Unassigned
-                </span>
-              </div>
-            )}
-          </div>
+        <div className="flex items-center justify-between mb-2">
+          {person.role ? (
+            <span className="inline-block px-3 py-1 bg-slate-700/60 text-cyan-300 rounded-full text-sm font-medium border border-slate-600/50">
+              {person.role.name}
+            </span>
+          ) : (
+            <span className="inline-block px-3 py-1 bg-amber-900/40 text-amber-300 rounded-full text-sm font-medium border border-amber-600/30">
+              Unassigned
+            </span>
+          )}
+
+          <button
+            onClick={() => setShowRoleForm(true)}
+            className="text-xs bg-slate-800/60 border cursor-pointer  border-cyan-700/50 hover:border-cyan-300  text-white px-2 py-1 rounded transition trasition duration-300"
+          >
+            {person.role ? "Change" : "Assign"}
+          </button>
         </div>
+
+        {showRoleForm && (
+          <AssignRoleForm
+            staffId={person.id}
+            onClose={() => setShowRoleForm(false)}
+            onRoleChanged={onRoleChanged}
+          />
+        )}
+
         <div className="flex  justify-between items-center border-t border-slate-700/50 pt-3 text-xs text-slate-500">
           <span>
-             Joined on {" "}
+            Joined on{" "}
             {new Date(person.createdAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "short",
