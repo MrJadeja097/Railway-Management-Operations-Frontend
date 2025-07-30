@@ -1,4 +1,4 @@
-import type { AssignRoleFormData, Role, Staff, StaffFormData } from "../features/staff/models";
+import type { AssignRoleFormData, Staff, StaffFormData } from "../features/staff/models";
 import apiHandler from "./handler";
 
 
