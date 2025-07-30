@@ -32,6 +32,7 @@ export const AddPermissionForm: React.FC<Props> = ({roleId, setShowAddModal}) =>
               success: `${data.permissionName} is added to this role.`,
               error: `Failed to add ${data.permissionName} permission.`
             })
+    await response;
   }
 
   const mutation = useMutation({
@@ -49,7 +50,7 @@ export const AddPermissionForm: React.FC<Props> = ({roleId, setShowAddModal}) =>
                 mutation.mutate(data);
               })} >
         <h3 className="text-lg font-semibold text-white mb-4">
-          Add New Permission
+          Allocate Permission
         </h3>
         <div>
           <input

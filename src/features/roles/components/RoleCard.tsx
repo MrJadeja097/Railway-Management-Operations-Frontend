@@ -60,7 +60,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({
           onClick={() => setShowAddModal(true)}
           className="px-4 py-2 rounded-lg text-sm text-white font-semibold transition-all duration-300 hover:text-white hover:shadow-[0_0_10px_#22c55e] border border-green-500/30"
         >
-          + Add Permission
+          + Allow Access
         </button>
 
         <button

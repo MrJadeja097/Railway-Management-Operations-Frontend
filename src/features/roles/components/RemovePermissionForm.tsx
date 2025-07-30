@@ -27,10 +27,11 @@ export const RemovePermissionForm: React.FC<Props> = ({roleId, setShowRemoveModa
   const remove = async(data: PermissionFormData) => {
     const response = removePermission(data)
     toast.promise(response ,{
-              pending: `Adding ${data.permissionName} to this role...`,
-              success: `${data.permissionName} is added to this role.`,
-              error: `Failed to add ${data.permissionName} permission.`
+              pending: `Removeing ${data.permissionName} to this role...`,
+              success: `${data.permissionName} is removed from this role.`,
+              error: `Failed to remove ${data.permissionName} permission.`
             })
+    await response;
   }
   const mutation = useMutation({
       mutationFn:async (data: PermissionFormData) => await remove(data),
